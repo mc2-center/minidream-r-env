@@ -1,0 +1,125 @@
+---
+title: "R Notebook Demo"
+output: html_notebook
+---
+
+# Introduction to R Notebook
+
+*Note: this is the canned content that RStudio automatically adds to every new notebook.*
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file).
+
+-----
+
+# Setup
+
+> **Run this chunk before proceeding!!**
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+# METABRIC data demo
+
+Now we can get to some more relevant examples and demonstrate how activities might be structured for the the CSBC/PS-ON Summer Research Program miniDREAM Challenge.
+
+The idea for weekly challenge activities is to *guide* students through interactions and predictive modeling with the data. The R Markdown format will allow us to provide plenty of instruction and explanation for each step, and the R Notebook platform means that students will only need to *execute* code - not write it.
+
+## Step-by-step activity
+
+Here's a basic example, exploring some of the clinical features in the METABRIC breast cancer data.
+
+### 1. Loading the data
+
+*Data will already be stored and available in each student's working environment. They won't need to download or format any files.* 
+
+Click the green play button ("Run") on the right side of the code chunk below to load the data table storing clinical measurements for the subjects from the METABRIC study.
+
+```{r}
+# load data
+load("../data/.R_OBJECTS/Complete_METABRIC_Clinical_Features_Data.rbin")
+```
+
+The information is stored in R in a **data frame** object, which looks a lot like an Excel spreadsheet. Run the chunk below to preview the data frame. Note: the `head()` command tells R to print only the first few rows of a table (6 by default).
+
+```{r}
+# preview data frame with head
+head(Complete_METABRIC_Clinical_Features_Data)
+```
+
+### 2. Summarizing data
+
+*Depending on the structure of corresponding modules, the activity portion could contain interspersed instructional text and/or comprehension checks; or, the text and code could be more focused on completing the task at hand.*
+
+Another useful way to quickly explore information in a data frame is the `summary()` command, which outputs either *quartiles* for numerical variables or *counts* for each class within categorical variables. Run the chunk below to see a summary for the first few variables (columns) in the clinical features table.
+
+```{r}
+# summarize columns 1 through 5
+summary(Complete_METABRIC_Clinical_Features_Data[, 1:5])
+```
+
+### 3. Plotting data
+
+*Because the purpose of activities is not to teach students how to program in R, we don't necessarily need to follow any strict conventions for style (e.g., base plotting vs. ggplot2). However, we'll want to avoid doing anything too crazy or complicated with the code, such that students get distracted or confused.*
+
+We can visualize the distribution of `age_at_diagnosis` values using a histogram.
+
+```{r}
+with(Complete_METABRIC_Clinical_Features_Data, hist(age_at_diagnosis))
+```
+
+Alternatively, we can use a scatterplot to check whether there is any association between `age_at_diagnosis` and tumor `size`.
+
+```{r}
+Complete_METABRIC_Clinical_Features_Data %>% 
+    ggplot(aes(x = age_at_diagnosis, y = size)) +
+    geom_smooth(method = "lm") +
+    geom_point()
+```
+
+## Viewing the notebook on Synapse
+
+At any point, if a student wishes to view the HTML (or PDF)-rendered version of the notebook (e.g., if they accidentally modified some code and want to change it back), we'll host this on Synapse.
+
+## Connecting to challenge
+
+The activity should presumably conclude with some sort of prediction output, which could be saved to a file and submitted to the challenge on Synapse.
+
+```{r}
+my_prediction <- Complete_METABRIC_Clinical_Features_Data$age_at_diagnosis > 60
+write_csv("../submissions/prediction0.csv", my_prediction)
+```
+
+Because the Synapse client will also be pre-loaded in all student environments, we should be able to hard code most of this for each activity. Based on the student's login or some other local configuration, we should also be able to keep submissions linked to each student.
+
+```{r, eval=FALSE}
+library(synapseClient)
+my_submission <- File("../submissions/prediction0.csv", 
+                      parentId = "syn12345")
+my_sub <- synStore(my_submission)
+evaluation_id = '8116290'
+evaluation <- synGetEvaluation(evaluation_id)
+submission <- submit(evaluation = evaluation, 
+                     entity = my_sub, 
+                     submissionName = 'Our Final Answer', 
+                     team_name = 'Blue Team')
+```
+
+_____
+
+# Environment
+
+```{r}
+sessionInfo()
+```
+
