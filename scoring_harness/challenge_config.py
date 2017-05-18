@@ -1,9 +1,9 @@
 # Use rpy2 if you have R scoring functions
-# import rpy2.robjects as robjects
-# import os
-# filePath = os.path.join(os.path.dirname(os.path.abspath(__file__)),'getROC.R')
-# robjects.r("source('%s')" % filePath)
-# AUC_pAUC = robjects.r('GetScores')
+import rpy2.robjects as robjects
+import os
+filePath = os.path.join(os.path.dirname(os.path.abspath(__file__)),'getROC.R')
+robjects.r("source('%s')" % filePath)
+AUC_pAUC = robjects.r('GetScores')
 ##-----------------------------------------------------------------------------
 ##
 ## challenge specific code and configuration
@@ -14,10 +14,10 @@
 ## A Synapse project will hold the assetts for your challenge. Put its
 ## synapse ID here, for example
 ## CHALLENGE_SYN_ID = "syn1234567"
-CHALLENGE_SYN_ID = ""
+CHALLENGE_SYN_ID = "syn8650663"
 
 ## Name of your challenge, defaults to the name of the challenge's project
-CHALLENGE_NAME = ""
+CHALLENGE_NAME = "CSBC Summer Research Program miniDREAM Challenge"
 
 ## Synapse user IDs of the challenge admins who will be notified by email
 ## about errors in the scoring script
@@ -64,13 +64,6 @@ evaluation_queues = [
         'scoring_func':score1
         'validation_func':validate_func
         'goldstandard_path':'path/to/sc1gold.txt'
-    },
-    {
-        'id':2,
-        'scoring_func':score2
-        'validation_func':validate_func
-        'goldstandard_path':'path/to/sc2gold.txt'
-
     }
 ]
 evaluation_queue_by_id = {q['id']:q for q in evaluation_queues}
