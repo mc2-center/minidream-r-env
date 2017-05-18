@@ -21,7 +21,7 @@ CHALLENGE_NAME = "CSBC Summer Research Program miniDREAM Challenge"
 
 ## Synapse user IDs of the challenge admins who will be notified by email
 ## about errors in the scoring script
-ADMIN_USER_IDS = []
+ADMIN_USER_IDS = ['3324230','2223305']
 
 
 ## Each question in your challenge should have an evaluation queue through
@@ -59,11 +59,9 @@ def score2(submission, goldstandard_path):
     return(score1, score2, score3)
 
 evaluation_queues = [
+#CSBC Summer Research DREAM submission (9603635)
     {
-        'id':1,
-        'scoring_func':score1
-        'validation_func':validate_func
-        'goldstandard_path':'path/to/sc1gold.txt'
+        'id':9603635
     }
 ]
 evaluation_queue_by_id = {q['id']:q for q in evaluation_queues}
@@ -102,7 +100,7 @@ def validate_submission(evaluation, submission):
     """
     config = evaluation_queue_by_id[int(evaluation.id)]
     validated, validation_message = config['validation_func'](submission, config['goldstandard_path'])
-
+    
     return True, validation_message
 
 
