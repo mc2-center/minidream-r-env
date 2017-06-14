@@ -1,9 +1,9 @@
 # Use rpy2 if you have R scoring functions
-# import rpy2.robjects as robjects
-# import os
-# filePath = os.path.join(os.path.dirname(os.path.abspath(__file__)),'getROC.R')
-# robjects.r("source('%s')" % filePath)
-# AUC_pAUC = robjects.r('GetScores')
+import rpy2.robjects as robjects
+import os
+filePath = os.path.join(os.path.dirname(os.path.abspath(__file__)),'getROC.R')
+robjects.r("source('%s')" % filePath)
+AUC_pAUC = robjects.r('GetScores')
 ##-----------------------------------------------------------------------------
 ##
 ## challenge specific code and configuration
@@ -69,6 +69,7 @@ def score_func(submission, goldstandard_path):
     return(r2, rmse)
 
 evaluation_queues = [
+#CSBC Summer Research DREAM submission (9603635)
     {
         'id':9604686,
         'scoring_func':score_func,
@@ -112,7 +113,7 @@ def validate_submission(evaluation, submission):
     """
     config = evaluation_queue_by_id[int(evaluation.id)]
     validated, validation_message = config['validation_func'](submission, config['goldstandard_path'])
-
+    
     return True, validation_message
 
 

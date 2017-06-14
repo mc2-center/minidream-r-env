@@ -46,3 +46,28 @@ write.table(testEXP, "/home/shared/data/metabric_split/test_expression.txt", sep
 write.table(trainingEXP, "/home/shared/data/metabric_split/training_expression.txt", sep="\t", quote = F,row.names = F)
 write.table(validationEXP, "/home/shared/data/metabric_split/validation_expression.txt", sep="\t", quote = F,row.names = F)
 
+
+
+#### COMEBINE
+
+train_clin = read.csv("/home/shared/data/metabric_split/training_clinical.txt",sep="\t")
+test_clin = read.csv("/home/shared/data/metabric_split/test_clinical.txt",sep="\t")
+train_clin$split_group = "training"
+test_clin$split_group = "test"
+
+activity_clinical = rbind(train_clin, test_clin)
+write.table(activity_clinical,"/home/shared/data/metabric_split/activity_clinical.txt", sep="\t", row.names=F, quote=F)
+
+
+training_exp = fread("/home/shared/data/metabric_split/training_expression.txt")
+test_exp = fread("/home/shared/data/metabric_split/test_expression.txt")
+test_exp$Entrez_Gene_Id <- NULL
+activity_expression = merge(training_exp, test_exp,by = "Hugo_Symbol",all = T)
+write.table(activity_expression,"/home/shared/data/metabric_split/activity_expression.txt", sep="\t", row.names=F, quote=F)
+
+validation_clinical = read.csv("/home/shared/data/metabric_split/validation_clinical.txt",sep="\t")
+validation_clinical$last_follow_up_status <- NULL
+validation_clinical$T <- NULL
+validation_clinical$survival_5y <- NULL
+write.table(validation_clinical,"/home/shared/data/metabric_split/challenge_clinical.txt", sep="\t", row.names=F, quote=F)
+
