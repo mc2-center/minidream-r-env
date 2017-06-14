@@ -127,6 +127,6 @@ def score_submission(evaluation, submission):
     config = evaluation_queue_by_id[int(evaluation.id)]
     score = config['scoring_func'](submission, config['goldstandard_path'])
     #Make sure to round results to 3 or 4 digits
-    return (dict(score=round(score[0],4), rmse=score[1]), "You did fine!")
+    return (dict(score=round(score[0], 3), rmse=round(score[1], 3)), "Nice work!")
 
 

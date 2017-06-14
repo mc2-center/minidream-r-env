@@ -1,4 +1,4 @@
-#
+
 # Command line tool for scoring and managing Synapse challenges
 #
 # To use this script, first install the Synapse Python Client
@@ -283,11 +283,15 @@ def score(evaluation, canCancel, dry_run=False):
         ## refetch the submission so that we get the file path
         ## to be later replaced by a "downloadFiles" flag on getSubmissionBundles
         submission = syn.getSubmission(submission)
+        file_handle = os.path.splitext(os.path.basename(submission.filePath))[0]
 
         try:
             score, message = conf.score_submission(evaluation, submission)
 
             print "scored:", submission.id, submission.name, submission.userId, score
+
+            ## add activity annotation
+            score['activity'] = 'Activity {}'.format(re.search('(?<=activity\-)[0-9]', file_handle).group())
 
             ## fill in team in submission status annotations
             if 'teamId' in submission:
@@ -301,8 +305,8 @@ def score(evaluation, canCancel, dry_run=False):
                 score['team'] = get_user_name(profile)
             else:
                 score['team'] = '?'
-            add_annotations = synapseclient.annotations.to_submission_status_annotations(score,is_private=True)
-            status = update_single_submission_status(status, add_annotations)
+            add_annotations = synapseclient.annotations.to_submission_status_annotations(score, is_private=False)
+            status = update_single_submission_status(status, add_annotations, force=True)
 
             status.status = "SCORED"
             ### Add in DATE as a public annotation and change team annotation to not private
