@@ -1,0 +1,234 @@
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T17:52:27.771163
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+Error in scoring script:
+Traceback (most recent call last):
+  File "challenge.py", line 714, in main
+    args.func(args)
+  File "challenge.py", line 577, in command_validate
+    validate(queue_info['id'], args.canCancel, dry_run=args.dry_run)
+  File "challenge.py", line 240, in validate
+    status = update_single_submission_status(status, add_annotations)
+  File "challenge.py", line 103, in update_single_submission_status
+    privateAnnotations = {each['key']:each['value'] for annots in existingAnnotations for each in existingAnnotations[annots] if annots not in ['scopeId','objectId'] and each['isPrivate'] == True}
+TypeError: 'NoneType' object is not iterable
+
+validating 9616524 jeddy_activity-1.txt
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15788286', u'recipients': [u'2223305', u'3324230'], u'createdOn': u'2017-06-14T17:52:36.951Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162587', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162587', u'subject': u'Exception while scoring submission to CSBC Summer Research Program miniDREAM Challenge'}
+
+done:  2017-06-14T17:52:37.034577
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T17:52:37.541448
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+done:  2017-06-14T17:52:40.484416
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:35:37.807579
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+Error in scoring script:
+Traceback (most recent call last):
+  File "challenge.py", line 729, in main
+    args.func(args)
+  File "challenge.py", line 592, in command_validate
+    validate(queue_info['id'], args.canCancel, dry_run=args.dry_run)
+  File "challenge.py", line 223, in validate
+    annotations = {'activity': re.search('activity.*', file_handle).group()}
+  File "/usr/lib/python2.7/re.py", line 146, in search
+    return _compile(pattern, flags).search(string)
+TypeError: expected string or buffer
+
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789571', u'recipients': [u'2223305', u'3324230'], u'createdOn': u'2017-06-14T18:35:45.164Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162653', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162653', u'subject': u'Exception while scoring submission to CSBC Summer Research Program miniDREAM Challenge'}
+
+done:  2017-06-14T18:35:45.271430
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:35:45.773044
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+done:  2017-06-14T18:35:48.610105
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:37:01.721990
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+Error in scoring script:
+Traceback (most recent call last):
+  File "challenge.py", line 729, in main
+    args.func(args)
+  File "challenge.py", line 592, in command_validate
+    validate(queue_info['id'], args.canCancel, dry_run=args.dry_run)
+  File "challenge.py", line 255, in validate
+    status = update_single_submission_status(status, add_annotations)
+  File "challenge.py", line 103, in update_single_submission_status
+    privateAnnotations = {each['key']:each['value'] for annots in existingAnnotations for each in existingAnnotations[annots] if annots not in ['scopeId','objectId'] and each['isPrivate'] == True}
+TypeError: 'NoneType' object is not iterable
+
+validating 9616524 jeddy_activity-1.txt
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789574', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T18:37:09.609Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162655', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162655', u'subject': u'Exception while scoring submission to CSBC Summer Research Program miniDREAM Challenge'}
+
+done:  2017-06-14T18:37:10.237534
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:37:10.746131
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+done:  2017-06-14T18:37:13.871939
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:40:02.432113
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+Error in scoring script:
+Traceback (most recent call last):
+  File "challenge.py", line 730, in main
+    args.func(args)
+  File "challenge.py", line 593, in command_validate
+    validate(queue_info['id'], args.canCancel, dry_run=args.dry_run)
+  File "challenge.py", line 256, in validate
+    status = update_single_submission_status(status, add_annotations)
+  File "challenge.py", line 103, in update_single_submission_status
+    privateAnnotations = {each['key']:each['value'] for annots in existingAnnotations for each in existingAnnotations[annots] if annots not in ['scopeId','objectId'] and each['isPrivate'] == True}
+TypeError: 'NoneType' object is not iterable
+
+validating 9616524 jeddy_activity-1.txt
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789577', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T18:40:09.992Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162657', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162657', u'subject': u'Exception while scoring submission to CSBC Summer Research Program miniDREAM Challenge'}
+
+done:  2017-06-14T18:40:10.453037
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:40:10.938412
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+done:  2017-06-14T18:40:14.409842
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:40:56.635836
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+Error in scoring script:
+Traceback (most recent call last):
+  File "challenge.py", line 714, in main
+    args.func(args)
+  File "challenge.py", line 577, in command_validate
+    validate(queue_info['id'], args.canCancel, dry_run=args.dry_run)
+  File "challenge.py", line 240, in validate
+    status = update_single_submission_status(status, add_annotations)
+  File "challenge.py", line 103, in update_single_submission_status
+    privateAnnotations = {each['key']:each['value'] for annots in existingAnnotations for each in existingAnnotations[annots] if annots not in ['scopeId','objectId'] and each['isPrivate'] == True}
+TypeError: 'NoneType' object is not iterable
+
+validating 9616524 jeddy_activity-1.txt
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15788286', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T18:41:01.640Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162658', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162658', u'subject': u'Exception while scoring submission to CSBC Summer Research Program miniDREAM Challenge'}
+
+done:  2017-06-14T18:41:02.395508
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:41:02.903422
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+done:  2017-06-14T18:41:06.667983
+=========================================================================== 
+
+

@@ -7,21 +7,22 @@
 ##-----------------------------------------------------------------------------
 ##
 ## challenge specific code and configuration
-##
+import pandas as pd
+import sklearn.metrics as skm
 ##-----------------------------------------------------------------------------
 
 
 ## A Synapse project will hold the assetts for your challenge. Put its
 ## synapse ID here, for example
 ## CHALLENGE_SYN_ID = "syn1234567"
-CHALLENGE_SYN_ID = ""
+CHALLENGE_SYN_ID = "syn8650663"
 
 ## Name of your challenge, defaults to the name of the challenge's project
-CHALLENGE_NAME = ""
+CHALLENGE_NAME = "CSBC Summer Research Program miniDREAM Challenge"
 
 ## Synapse user IDs of the challenge admins who will be notified by email
 ## about errors in the scoring script
-ADMIN_USER_IDS = []
+ADMIN_USER_IDS = ['2223305']
 
 
 ## Each question in your challenge should have an evaluation queue through
@@ -40,37 +41,39 @@ ADMIN_USER_IDS = []
 
 def validate_func(submission, goldstandard_path):
     ##Read in submission (submission.filePath)
+    submission_df = pd.read_csv(submission.filePath)
+    col_names = list(submission_df)
+
     ##Validate submission
     ## MUST USE ASSERTION ERRORS!!! 
     ##eg.
     ## assert os.path.basename(submission.filePath) == "prediction.tsv", "Submission file must be named prediction.tsv"
     ## or raise AssertionError()...
     ## Only assertion errors will be returned to participants, all other errors will be returned to the admin
-    return(True,"Passed Validation")
+    assert 'METABRIC_ID' in col_names, "'METABRIC_ID' column not found in '{}'".format(os.path.basename(submission.filePath))
+    assert submission_df['METABRIC_ID'].dtype == 'O', "'METABRIC_ID' column must contain string values"
+    assert 'T' in col_names, "'T' column not found in '{}'".format(os.path.basename(submission.filePath))
+    assert submission_df['T'].dtype == 'float64', "'T' column must contain numeric values"
+    assert submission_df.shape[0] == 434, "submission should contain 434 rows"
+    return (True, "Passed Validation")
 
-def score1(submission, goldstandard_path):
+def score_func(submission, goldstandard_path):
     ##Read in submission (submission.filePath)
-    ##Score against goldstandard
-    return(score1, score2, score3)
+    goldstandard_df = pd.read_csv(goldstandard_path, delimiter="\t")[['METABRIC_ID', 'T']]
+    submission_df = pd.read_csv(submission.filePath)[['METABRIC_ID', 'T']]
 
-def score2(submission, goldstandard_path):
-    ##Read in submission (submission.filePath)
     ##Score against goldstandard
-    return(score1, score2, score3)
+    check_df = pd.merge(submission_df, goldstandard_df, how='left', on='METABRIC_ID')
+    r2 = skm.r2_score(check_df['T_y'], check_df['T_x'])
+    rmse = skm.mean_squared_error(check_df['T_y'], check_df['T_x'])**(0.5)
+    return(r2, rmse)
 
 evaluation_queues = [
     {
-        'id':1,
-        'scoring_func':score1
-        'validation_func':validate_func
-        'goldstandard_path':'path/to/sc1gold.txt'
-    },
-    {
-        'id':2,
-        'scoring_func':score2
-        'validation_func':validate_func
-        'goldstandard_path':'path/to/sc2gold.txt'
-
+        'id':9604686,
+        'scoring_func':score_func,
+        'validation_func':validate_func,
+        'goldstandard_path':'../data/validation/validation_clinical.txt'
     }
 ]
 evaluation_queue_by_id = {q['id']:q for q in evaluation_queues}
@@ -123,6 +126,6 @@ def score_submission(evaluation, submission):
     config = evaluation_queue_by_id[int(evaluation.id)]
     score = config['scoring_func'](submission, config['goldstandard_path'])
     #Make sure to round results to 3 or 4 digits
-    return (dict(score=round(score[0],4), rmse=score[1], auc=score[2]), "You did fine!")
+    return (dict(score=round(score[0],4), rmse=score[1]), "You did fine!")
 
 
