@@ -1,0 +1,68 @@
+---
+title: "Module 0 - Setup & orientation"
+author: "James Eddy"
+date: '`r lubridate::today()`'
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# About this activity
+
+All you need to do here is read along and follow the instructions. The goal is to introduce you to R Markdown and show you how you'll be using R Notebooks to work through other modules in the mini-DREAM Challenge. This activity isn't really about the R code itself (which we'll start to cover in **Module 1**), but to give you a feel for running R code within notebooks.
+
+## R Markdown
+
+Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. **R Markdown** is a specific version of this syntax that allows you to combine text and R code in a single document.
+
+With R Markdown, you can write attractive reports that include R output. You write the reports in a markdown document, inserting R code in "chunks" where you like it. R then generates or "knits" a final document that replaces the R code with its results.
+
+To learn more about R Markdown, visit [rmarkdown.rstudio.com](http://rmarkdown.rstudio.com/). The site provides a quick tour of the R markdown syntax, as well as in depth articles and examples. Alternatively, you can take RStudio’s online course [“Reporting with R Markdown”](https://www.datacamp.com/courses/reporting-with-r-markdown) to get up to speed fast.
+
+## R Notebooks
+
+You're currently working inside an [R Markdown](http://rmarkdown.rstudio.com) Notebook (or, if you're viewing this in a web browser, the *knitted* output version of the notebook). When you execute **chunks** of code within the notebook, the results appear beneath the code. 
+
+### Running chunks with the click of a button
+
+Try executing this chunk by clicking the *Run* button (green arrow) within the chunk. 
+
+```{r}
+print("Hello world!")
+```
+
+You should see a line of output text that looks like `[1] "Hello world!"`.
+
+### Running chunks with a keyboard shortcut
+
+Run this next chunk by placing your cursor inside it and pressing *Cmd+Shift+Enter* (if you're working on a Windows computer, use *Ctrl+Shift+Enter* instead).
+
+```{r}
+data(cars)
+plot(cars)
+```
+
+You should see a scatterplot of points for distance values (`dist`) versus `speed`.
+
+### Table outputs in R Notebooks
+
+One last feature that's worth mentioning: R Notebooks have a pretty handy way of displaying information in tables known as **data frames**. Basically, instead of trying to dump an entire table on the screen at once, the notebook interface will split things into rows of 10 and however many columns fit on the screen. You can scroll through rows by clicking on the **'Previous'** or **'Next'** buttons (or any of the individual page numbers). To view other columns, click on the little white arrow at the top right corner of the table.
+
+```{r}
+load("/home/shared/data/metabric_split/activity_data.RData")
+activity_clinical_df
+```
+
+**Spoiler alert:** the information in the table above describes various clinical features for patients in the METABRIC dataset that you'll be using in this course. You don't need to worry about what any of this data means yet.
+
+## R Notebooks in mini-DREAM activities
+
+Now that you've seen how to run code in an R Notebook chunk, you're ready to go for the rest of the course! For module activities, we'll have you follow along in notebooks and run (or "execute") code one chunk at a time. You might occasionally be asked to modify some code within a chunk and see how that affects output. However, you won't need to create new R Notebooks (or code chunks) from scratch.
+
+# Wrapping up
+
+Congrats — you've reached the end of **Module 0**! You can now return to the **mini-DREAM** Challenge site on Synapse.
+
+

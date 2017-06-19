@@ -1,0 +1,731 @@
+---
+title: "Module 1 - Intro to Programming with R"
+author: "Alexendar Perez & James Eddy (credit to Alvaro Gonzalez for code development)"
+date: '`r lubridate::today()`'
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Introduction to Programming with R (Session I)
+==============================================
+
+Courses available online:
+
+Johns Hopkins Data Science: [https://www.coursera.org/specialization/jhudatascience/1](https://www.coursera.org/specialization/jhudatascience/1)
+
+Data Analysis for Genomics: [https://courses.edx.org/courses/HarvardX/PH525x/1T2014/info](https://courses.edx.org/courses/HarvardX/PH525x/1T2014/info)
+
+R is a freely available statistical computing environment/language. This hands-on workshop will cover the basics of R, plotting and performing bioinformatics analysis with R. A knowledge of basic statistics is required.
+
+Hello world!
+------------
+```{r}
+# Use the pound sign for commenting your code.
+# hello_func is my first function.
+hello_func <- function() {
+  # var1 is a variable of "character" data type
+  # and <- is used for assignment
+  var1 <- "Hello world!"
+  # This command will display the contents of var1 on the screen
+  show(var1)
+}
+# Function call
+hello_func()
+```
+
+Objects and variables
+---------------------
+
+Objects are entities that hold information. Objects tend to have different properties which we call attributes. Examples of attributes are length, name, etc. Objects are also known as variables in the programming environment. Variables are assigned a value by the user and can be manipulated to generate new variables.
+
+```{r}
+x <- 100
+```
+
+```x``` is variable and an integer object. ```x``` holds the value of 100.
+
+Typing the name of the variable on the command line prints out the value stored in the object.
+```{r}
+x
+```
+
+Data types
+----------
+
+All variables belong to a data type. Data types are called classes in R. A class defines the characteristics of the data stored in the variable. R provides a number of atomic or elementary data types. Users can also define their own classes(e.g., `GenomicRanges`), but this is beyond the scope of this introduction.
+
+R supports the following elementary data types:
+
+1. character
+2. numeric(real numbers)
+3. integer
+4. complex
+5. logical ```(TRUE/FALSE)```
+
+Collections of these atomic data types can be created as single objects using:
+
+1. vector
+2. matrix
+3. data.frame
+4. list
+5. factor
+
+### Numbers
+Numbers in R are generally treated as ```numeric```.
+
+```{r}
+# Create a variable called x with value 100
+x <- 100
+
+# View the variable by using the `print` command
+print(x)
+```
+
+```{r}
+# ...or by simply typing the name of the variable
+x
+```
+
+R as a calculator(try the examples below to for some basic math operations you can perform with R):
+```{r}
+x <- 100; y <- 50
+# Add or subtract numbers using the '+' and '-' symbols
+z <- x + y;
+z
+```
+```{r}
+x - 20
+```
+
+```{r}
+# Multiply or divide numbers using the '*' and '/' symbols
+x * y
+```
+
+```{r}
+x / y
+```
+
+```{r}
+# Use '^' to raise a number to some power
+3^2
+```
+
+```{r}
+# Use '%%' to get the "modulo"(remainder) after dividing by some number
+5 %% 2
+```
+
+### Special values
+NA, NaN, Inf. NA occurs for null values. NaN stands for Not a Number. Inf stands for infinite.
+
+### Vectors
+Vectors are collections of objects of the same data type. Eg: A vector of numerics is a collection of real numbers.
+
+Vectors can be created using the **c** function. A fundamental attribute of vectors is the length.
+```{r}
+x <- c(10, 20)                    # numeric
+length(x)
+```
+
+```{r}
+x <- c('TP53', 'PTEN', 'PDGFRA')  # character
+x
+```
+
+```{r}
+x <- c(TRUE, FALSE, TRUE)         # logical
+x
+```
+
+```{r}
+x <- 1:20                         # integer vector
+x
+```
+
+```{r}
+x <- 10:1
+x
+```
+
+More generally, the ```seq``` function can be used to create integer vectors in any given range. Let's use R's powerful help command:
+```
+?seq
+```
+```{r}
+# Create a sequence from 1 to 20, incrementing by 1
+seq(1, 20)
+```
+
+```{r}
+# Create a sequence from 1 to 20, incrementing by 5
+seq(1, 20, 5)
+```
+
+
+#### Subsetting(for vectors)
+Subsets of elements of the vectors can be accessed using **[**.
+```{r}
+alpha <- c('A', 'C', 'G', 'T')
+# Determine 3rd element in the vector alpha
+y <- alpha[3]
+y
+```
+
+Determine 1st and 2nd elements in vector alpha.
+```{r}
+alpha[1:2]
+```
+
+```{r}
+alpha[c(1, 2)]
+```
+
+```{r}
+indexes <- c(1, 2)
+alpha[indexes]
+```
+
+Vectors have ```names``` as one of their attributes. This means each element of the vector can be given a name. How would you store the status of a set of genes as mutated or not? Let's say we want to store TP53 as mutated, PTEN as not mutated and PDGFRA as mutated.
+
+```{r}
+mutations <- c(TRUE, FALSE, TRUE)
+names(mutations) <- c('TP53', 'PTEN', 'PDGFRA')
+mutations
+```
+
+```{r}
+mutations[2]
+```
+
+```{r}
+mutations['PTEN']
+```
+
+The same notation can be used to assign values to specific positions in vectors.
+Eg: Change P53 to unmutated and PTEN to mutated.
+```{r}
+mutations[1] <- FALSE
+mutations['PTEN'] <- TRUE
+mutations
+```
+Now, change both PTEN and PDGFRA to unmutated.
+```{r}
+mutations[2:3] <- FALSE
+mutations
+```
+Now, change both PTEN and P53 to mutated.
+```{r}
+mutations[c('PTEN', 'TP53')] <- TRUE
+mutations
+```
+
+### Matrices
+Two dimensional collection of objects of the same type. Vectors are one dimensional(nx1) and matrices are two dimensional(nxm). Matrices have a ```length``` attribute(what does it mean?) along with ```dim``` which stores the number of rows and columns in the matrix. Furthermore, the ```names``` attribute of vector is replaced by ```rownames``` and ```colnames``` to store the names of rows and columns respectively.
+
+To understand how a matrix is initialized, use the help function.
+
+```
+?matrix
+```
+
+Create a matrix of zeros. We will also explore parameters and parameter names in this section.
+
+```{r}
+x <- matrix(0, 2, 3)
+x
+```
+
+Parameter names can be specified during function calls.
+```{r}
+x <- matrix(0, nrow=2, ncol=3)
+x
+```
+
+The order of parameters does not matter if parameter names are used.
+```{r}
+x <- matrix(0, ncol=3, nrow=2)
+x
+```
+
+Matrices are defined in column-major order.
+```{r}
+x <- matrix(1:6, 2, 3)
+x
+```
+
+#### Subsetting(for matrices)
+Subsets of  elements of the vectors can be accessed using **[**, similar to vectors, but will have two dimensions: ```[row, col]```.
+
+Identify element in second row and third column.
+```{r}
+x[2,3]
+```
+Identify all elements in first row.
+```{r}
+x[1,1:3]
+```
+
+Another way to access all elements of rows/colums are to leave the corresponding dimension to be empty.
+```{r}
+x[1,]
+```
+
+Similarly, the values can be set using similar functions. Eg. set all elements of second column to 10.
+```{r}
+x
+```
+
+```{r}
+x[,2] <- 10
+x
+```
+
+
+Again, similar to the ```names``` function in vectors, there are two functions to associate names with rows and columns - ```rownames``` and ```colnames``` respectively.
+
+Build a matrix of microRNA seed matches in 3'UTRs of genes
+```{r}
+mirs.hits <- matrix(0, 3, 2)
+rownames(mirs.hits)  <- c('NEK9', 'CCDC81', 'CAMK1D')
+colnames(mirs.hits) <- c('let-7', 'miR-17')
+mirs.hits['NEK9', ] <- c(2, 1)
+mirs.hits['CCDC81', ] <- c(1, 0)
+mirs.hits['CAMK1D', ] <- 0
+mirs.hits
+```
+
+Now access miR hits for different genes.
+```{r}
+mirs.hits['CCDC81', 'let-7']
+```
+
+```{r}
+mirs.hits['NEK9', ]
+```
+
+```{r}
+mirs.hits[, 'miR-17']
+```
+
+#### cbind and rbind
+
+Matrices can also be built using column or row binding functions. 
+```{r}
+x <- c(1, 2, 3)
+y <- c(4, 5, 6)
+cbind(x, y)
+```
+
+```{r}
+rbind(x, y)
+```
+
+
+These are particularly useful when there is a necessity to append additional columns/rows to an existing matrix.
+```{r}
+x <- matrix(1:6, 2, 3)
+x
+```
+
+```{r}
+cbind(x, c(10, 20))
+```
+
+```{r}
+rbind(x, c(10, 20, 30))
+```
+
+### Factors
+Factors are data types used to represent categorial data.
+
+```{r}
+x <- factor(c("yes", "yes", "no", "yes", "no"))
+x
+?factor
+```
+
+```{r}
+colors_in_ord <- factor(x = c("blue", "red", "red", "blue", "yellow"),
+                        levels = c("yellow", "blue", "red"),
+                        ordered = TRUE)
+colors_in_ord
+```
+
+### Lists
+Lists are a special type of vector that can hold different classes of objects.
+
+```{r}
+x <- list(29, 'TP53', TRUE)
+x
+```
+
+```{r}
+x <- list(c(34, 29, 63), c('TP53', 'TP53', 'TP53'), c(TRUE, FALSE, TRUE))
+x
+```
+
+#### Subsetting(for lists)
+Subsets of elements of the list can be accessed using **[[**. Using **[** as before will create another list but only with the particular element.
+
+Extract first element of the list.
+```{r}
+x <- list(29, 'TP53', TRUE)
+x
+```
+
+```{r}
+x[[1]]
+```
+
+```{r}
+x[1]
+```
+
+```names``` again can be used to name the elements of the list. There are two ways to access the elements of the lists with names:
+
+```{r}
+names(x) <- c('Age', 'Gene', 'Mutated')
+x
+```
+
+Accessing the elements using ```names```
+```{r}
+x[['Gene']]
+```
+
+```{r}
+x$Gene
+```
+
+### Data frames
+
+Data frames are tabular objects(like matrices) that can store multiple data types. Each column of the data frame should be the same data type. Data frames are implemented as lists of vectors of the same length.
+
+As an example, let us build a data frame with different patient information.
+
+```{r}
+patients <- c('Patient1', 'Patient2')
+ages <- c(45, 56)
+tp53_status <- c(FALSE, TRUE)
+pdgfra_status <- c(TRUE, TRUE)
+x <- data.frame(patients, ages, 
+                tp53_status, pdgfra_status)
+rownames(x) <- patients
+colnames(x) <- c('Patients', 'Age', 'TP53', 'PDGFRA')
+x
+```
+
+cbind and rbind can also be used to attach new data to existing data frames.
+
+#### Subsetting(for data frames)
+Similar to matrices and lists, subsets can be accessed using both the **[** operator and *$* operator.
+
+Determine the TP53 mutation status of all patients:
+```{r}
+x[,'TP53']
+```
+
+```{r}
+x[,3]
+```
+
+```{r}
+x$TP53
+```
+
+Determine PDGRFA mutation status for patient 2:
+```{r}
+x[2, 4]
+```
+```{r}
+x[2, 'PDGFRA']
+```
+
+```{r}
+x['Patient2', 'PDGFRA']
+```
+
+
+Introduction to Programming with R (Session II)
+===============================================
+
+Iterative structures in the form of **for** loops and **while** loops.
+------------------------------------------------------------------------
+
+An essential power of any programming language derives from its ability to execute a sequence of commands iteratively. Traditionally, this iteration takes the form of **for** loops and **while** loops. For loops execute a finite sequence of commands a finite amount of time. In the example below the **for** loop prints out a sequence of numbers 1-10 where it first multiples the value in the sequence by two. For example if i(the iteration variable) takes the value 5 then the value 10 will be printed to the screen.
+
+```{r}
+for(i in 1:10){
+  print(i*2)
+}
+```
+
+Sometimes a programmer cannot define a finite value of iterations needed to achieve a results. However, the programmer is able to define a logical condition, that when no longer **TRUE** should terminate the iteration. This type of iteration structure is known as a **while** loop. In the example below the **while** loops prints out a sequence of numbers starting with the value 1(1 = 1 + 0) and going until the value 20. At first this may seem abberrant since the logical condition states the loop should continue until j < 20, however, a value of 20 is declared by the loop. Think about the behavior of the loop. When j = 19 then the loop continues because 19 < 20. However, within the loop j is augmented by 1 and then printed so when j = 19 then j = j + 1 equals 20 and this value is printed. When the value of 20 is assessed by the logical condition in the next iteration the loop terminates. 
+
+```{r}
+j <- 0
+while(j < 20){
+  j <- j + 1
+  print(j)
+}
+```
+
+
+Functions and parameters
+------------------------
+
+Parameters are variables which are passed to the function for evaluation. The previous function always prints "Hello world!". We will use a parameter to print something of our choice.
+```{r}
+print_func <- function(var1) {
+  show(var1)
+}
+# Function call
+print_func('MSKCC')
+```
+
+```{r}
+print_func(100)
+```
+
+Input/output
+------------
+There are a number of functions for reading/writing data to/from R. We will start with generating a csv file of the patient data frame we had previously created.
+
+```{r}
+patients <- c("Patient1", "Patient2")
+ages <- c(45, 56)
+tp53_status <- c(FALSE, TRUE)
+pdgfra_status <- c(TRUE, TRUE)
+x <- data.frame(patients, ages, tp53_status, pdgfra_status)
+rownames(x) <- patients
+colnames(x) <- c("Patients", "Age", "TP53", "PDGFRA")
+```
+
+```
+?write.csv
+```
+```{r}
+write.csv(x, 'patient_info.csv')
+```
+
+Now read it back into another variable:
+```{r}
+y <- read.csv('patient_info.csv')
+y
+```
+
+```{r}
+x
+```
+
+Note that by default, ```read.csv``` assumes the presence of column names and assumes there are no row names. Hence ```y``` has an extra column. Use the ```row.names``` parameter to inform ```read.csv``` about the presence of rownames.
+```{r}
+y <- read.csv('patient_info.csv', row.names = 1)
+y
+```
+
+Similarly there are functions like ```read.table``` for matrices, ```read.delim``` for data separated by a delimitter other than a comma; ```scan``` is a very fundamental function on which all the other "read" functions are based on.
+
+### Loading and saving data in binary format
+Storing data in binary format can save space and also time while reading the data. This format of course can be accessed only from R.
+
+The functions are ```load```, ```save```, ```readRDS```, ```saveRDS```. We will look at ```readRDS``` and ```saveRDS```.
+
+```{r}
+saveRDS(x, file='patient_info.rds')
+x2 <- readRDS('patient_info.rds')
+x2
+```
+Use the ```save``` function for saving multiple objects and the ```load``` function for loading them into your R session.
+
+Control structures
+------------------
+
+Control structures, as the name suggests, are used for controlling the flow of execution of the program.
+
+1. ```if, else``: testing a condition
+2. ```for```: execute a piece of code multiple times
+3. ```return```: exit a function
+4. ```next```: skip an iteration of the loop
+5. ```break```: Break the execution of the loop
+
+These structures depend on the conditional operators used for comparison of expressions: ```<, >, ==, !=, >=, <=```. The different tests can be combined using the ```&, | ``` operators.
+
+```{r}
+x <- 100
+y <- 20
+x > 10
+```
+
+```{r}
+y > 40
+```
+
+```{r}
+x > 10 & y < 20
+```
+
+```{r}
+x > 10 | y == 0
+```
+
+```if, else``` is used to test for conditions and perform a task based on the result of the test.
+
+The control structure for if/else is
+```
+if(<condition1>) {
+  # do something
+} else if(<condition1>) {
+  # do something else
+} else {
+  # do something else
+}
+```
+
+```{r}
+x <- 100
+if(x < 100) {
+  show("x is less than 100")
+} else if( x >= 100) {
+  show("x is greater than equal to 100")
+}
+```
+```{r}
+if(x > 0) {
+  show("Else condition is optional")
+}
+```
+
+
+```for``` loops are extremely useful for performing repetitive tasks. Better to use loops than to use the same code multiple times.
+
+```
+for(<var_name> in <vector>) {
+  # Repeated task
+}
+```
+
+```{r}
+for(i in 1:10){
+  show(i)
+}
+```
+
+```next``` and ```break``` operations can be respectively used to skip some iterations based on conditions and exit from a loop.
+
+```{r}
+for(i in 1:10) {
+  if(i == 5 | i == 8)
+    next
+  show(i)
+}
+```
+
+```{r}
+for(i in 1:10) {
+  if(i == 5)
+    break
+  show(i)
+}
+```
+
+Vectorized operations
+---------------------
+
+A number of operations in R are "vectorized", ie they are applied to all elements of a vector/matrix. This makes the code more efficient and easy to write.
+This is  a very powerful aspect of the language and significantly adds to the ability of the language to deal with large scale data.
+
+```{r}
+x <- c(1, 10, 30, 50)
+x + 1
+```
+
+```{r}
+x - 1
+```
+
+```{r}
+x * 10
+```
+
+```{r}
+x / 10
+```
+
+```{r}
+y <- c(100, 20, 22, 44)
+x + y
+```
+
+```{r}
+y <- c(1, 2)
+x + y
+```
+
+Vectorized operations also work on matrices:
+```{r}
+x <- matrix(1:4, nrow=2, ncol=2)
+x
+```
+
+```{r}
+x + 2
+```
+
+```{r}
+y <- matrix(10, nrow=2, ncol=2)
+x + y
+```
+
+This command will perform element-wise multiplications:
+```{r}
+x * y
+```
+
+Matrix multiplication can be performed using the ```%*%``` operator:
+```{r}
+x %*% y
+```
+
+### lapply and apply functions
+The ```lapply``` function can be used to perform the same function on each element of a list.
+
+```{r}
+x <- list(1, 2, 3, 4)
+lapply(x, function(x) {x + 1})
+```
+
+Note that the result is also a list. To get a simplified version, use the ```sapply``` function.
+
+```{r}
+sapply(x, function(x) { x + 1 })
+```
+
+The ```apply``` function can be used to apply the same function on  each row/column of a matrix.
+
+```{r}
+x <- matrix(1:4, nrow=2, ncol=2)
+```
+
+This determines the sum of each row of the matrix:
+```{r}
+apply(x, 1, function(row) {sum(row)})
+```
+
+Now the sum of each column:
+```{r}
+apply(x, 2, function(var) { sum(var)})
+```
+
+Miscellaneous functions
+-----------------------
+* rep
+* grep
+* gsub
+* aggregate
+* sprintf
+* which

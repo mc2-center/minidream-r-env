@@ -1,0 +1,14 @@
+---
+title: "Module 3 - Working with genomics data"
+author: "Andrew Gentles"
+date: '`r lubridate::today()`'
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Summary
+
+## Header 1

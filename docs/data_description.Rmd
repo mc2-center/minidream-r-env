@@ -1,0 +1,105 @@
+---
+title: "CSBC mini-DREAM Challenge Data"
+author: "James Eddy (Sage)"
+date: '`r lubridate::today()`'
+output:
+  html_notebook:
+    code_folding: hide
+    fig_width: 8
+    toc: yes
+    toc_float: yes
+---
+
+## Summary
+
+METABRIC data were obtained from [cBioPortal](http://www.cbioportal.org/study?id=brca_metabric#summary). Before splitting data into training, test, and validation sets, we removed any samples that were censored less than 5 years after diagnosis. We also removed any samples for which expression data was not available. As discussed in a planning meeting several weeks ago, the goal is for predictions of survival (i.e., time) to be based on linear models, to the extent possible.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(stringr)
+```
+
+## Where to find the data
+
+Pre-formatted and filtered METABRIC data files to be used for the **mini-DREAM** challenge can be found in the folder `/home/shared/data/metabric_split/`:
+
+```{r}
+metabric_folder <- "/home/shared/data/metabric_split"
+list.files(metabric_folder)
+```
+
+
+Data named `activity_*` are intended to be used for module demonstrations and examples, as well as for training and evaluating models. Data named `challenge_` are intended to be used to train final predictions that will be submitted to Synapse and scored for the challenge; all outcome information (survival status, time) has been removed from these files.
+
+## Data summary
+
+Details for the tab-delimited text versions of each file are shown in the table below. Note that for **clinical** data, samples are represented by rows and features by columns; for **expression** data, features are in rows and samples in columns. 
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+data_summary <- list.files(metabric_folder, pattern = "txt", 
+                           full.names = TRUE) %>% 
+    tibble(path = .) %>% 
+    mutate(filename = basename(path),
+           context = str_extract(filename, ".*(?=_)"),
+           datatype = str_extract(filename, "(?<=_)([a-z]|[A-Z])*"),
+           dataset = paste0(context, "_data.RData")) %>% 
+    filter(datatype %in% c("clinical", "expression")) %>% 
+    mutate(table_dim = map(path, function(f) {
+        read_tsv(f) %>% 
+            dim() %>% 
+            str_c(collapse = ",")
+    })) %>% 
+    separate(table_dim, c("num_rows", "num_cols"), convert = TRUE)
+```
+
+
+```{r}
+data_summary
+```
+
+It's also worth noting that the expression tables have two additional columns: `Hugo_Symbol` and `Entrez_Gene_Id`. Thus, for each expression dataset, the number of samples should be equal to `num_cols - 2`.
+
+## Loading the data
+
+For convenience, we've saved activity and challenge datasets as `.RData` files, which can be loaded using the `load()` command.
+
+```{r}
+activity_data_path <- "/home/shared/data/metabric_split/activity_data.RData"
+load("/home/shared/data/metabric_split/activity_data.RData", verbose = TRUE)
+```
+
+## Using the data for lectures/activities
+
+Again, the nominal dataset to use for introducing and demonstrating module concepts is `activity_data.RData`. The table in `activity_clinical_df` includes a variable named `split_group`, which assigns samples to training and test groups:
+
+```{r}
+table(activity_clinical_df$split_group)
+```
+
+For all cases where you're not planning to include cross-validation or other practices related to generalizability, you should feel free to use all samples (or a subset of your choosing). If you wish to demonstrate concepts related to model robustness using a training and test set, you can subset the data according to `split_group`.
+
+&nbsp;
+
+The relevant variables for outcome are survival status (`last_follow_up_status`), time (`T`), and optionally, 5-year survival status (`survival_5y`).
+
+```{r}
+set.seed(0)
+activity_clinical_df %>% 
+    sample_n(10) %>% 
+    select(METABRIC_ID, last_follow_up_status, T, survival_5y)
+```
+
+Survival time is measured in **days** since initial visit. Follow-up status is coded as follows:  
+
++ `a` = alive 
++ `d-d.s.` = died of disease 
++ `d-o.c.`= died of other causes 
+
+
+## Using the data for challenge predictions
+
+After using the `activity` data to design and evaluate a predictive model or classification rule, students can then apply the model to any combination of clinical or expression variables in the `challenge` dataset. The output of the model prediction should be vector of survival times (in days), which will be saved as a CSV and submitted to the challenge.
+
+
+
+

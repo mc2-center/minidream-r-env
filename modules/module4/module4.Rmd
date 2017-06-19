@@ -1,0 +1,14 @@
+---
+title: "Module 4 - The curse of dimensionality"
+author: "Justin Guinney"
+date: '`r lubridate::today()`'
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Summary
+
+## Header 1
