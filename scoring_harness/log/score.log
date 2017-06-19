@@ -1,0 +1,826 @@
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T17:52:27.771163
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+Error in scoring script:
+Traceback (most recent call last):
+  File "challenge.py", line 714, in main
+    args.func(args)
+  File "challenge.py", line 577, in command_validate
+    validate(queue_info['id'], args.canCancel, dry_run=args.dry_run)
+  File "challenge.py", line 240, in validate
+    status = update_single_submission_status(status, add_annotations)
+  File "challenge.py", line 103, in update_single_submission_status
+    privateAnnotations = {each['key']:each['value'] for annots in existingAnnotations for each in existingAnnotations[annots] if annots not in ['scopeId','objectId'] and each['isPrivate'] == True}
+TypeError: 'NoneType' object is not iterable
+
+validating 9616524 jeddy_activity-1.txt
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15788286', u'recipients': [u'2223305', u'3324230'], u'createdOn': u'2017-06-14T17:52:36.951Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162587', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162587', u'subject': u'Exception while scoring submission to CSBC Summer Research Program miniDREAM Challenge'}
+
+done:  2017-06-14T17:52:37.034577
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T17:52:37.541448
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+done:  2017-06-14T17:52:40.484416
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:35:37.807579
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+Error in scoring script:
+Traceback (most recent call last):
+  File "challenge.py", line 729, in main
+    args.func(args)
+  File "challenge.py", line 592, in command_validate
+    validate(queue_info['id'], args.canCancel, dry_run=args.dry_run)
+  File "challenge.py", line 223, in validate
+    annotations = {'activity': re.search('activity.*', file_handle).group()}
+  File "/usr/lib/python2.7/re.py", line 146, in search
+    return _compile(pattern, flags).search(string)
+TypeError: expected string or buffer
+
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789571', u'recipients': [u'2223305', u'3324230'], u'createdOn': u'2017-06-14T18:35:45.164Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162653', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162653', u'subject': u'Exception while scoring submission to CSBC Summer Research Program miniDREAM Challenge'}
+
+done:  2017-06-14T18:35:45.271430
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:35:45.773044
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+done:  2017-06-14T18:35:48.610105
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:37:01.721990
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+Error in scoring script:
+Traceback (most recent call last):
+  File "challenge.py", line 729, in main
+    args.func(args)
+  File "challenge.py", line 592, in command_validate
+    validate(queue_info['id'], args.canCancel, dry_run=args.dry_run)
+  File "challenge.py", line 255, in validate
+    status = update_single_submission_status(status, add_annotations)
+  File "challenge.py", line 103, in update_single_submission_status
+    privateAnnotations = {each['key']:each['value'] for annots in existingAnnotations for each in existingAnnotations[annots] if annots not in ['scopeId','objectId'] and each['isPrivate'] == True}
+TypeError: 'NoneType' object is not iterable
+
+validating 9616524 jeddy_activity-1.txt
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789574', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T18:37:09.609Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162655', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162655', u'subject': u'Exception while scoring submission to CSBC Summer Research Program miniDREAM Challenge'}
+
+done:  2017-06-14T18:37:10.237534
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:37:10.746131
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+done:  2017-06-14T18:37:13.871939
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:40:02.432113
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+Error in scoring script:
+Traceback (most recent call last):
+  File "challenge.py", line 730, in main
+    args.func(args)
+  File "challenge.py", line 593, in command_validate
+    validate(queue_info['id'], args.canCancel, dry_run=args.dry_run)
+  File "challenge.py", line 256, in validate
+    status = update_single_submission_status(status, add_annotations)
+  File "challenge.py", line 103, in update_single_submission_status
+    privateAnnotations = {each['key']:each['value'] for annots in existingAnnotations for each in existingAnnotations[annots] if annots not in ['scopeId','objectId'] and each['isPrivate'] == True}
+TypeError: 'NoneType' object is not iterable
+
+validating 9616524 jeddy_activity-1.txt
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789577', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T18:40:09.992Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162657', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162657', u'subject': u'Exception while scoring submission to CSBC Summer Research Program miniDREAM Challenge'}
+
+done:  2017-06-14T18:40:10.453037
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:40:10.938412
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+done:  2017-06-14T18:40:14.409842
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:40:56.635836
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+Error in scoring script:
+Traceback (most recent call last):
+  File "challenge.py", line 714, in main
+    args.func(args)
+  File "challenge.py", line 577, in command_validate
+    validate(queue_info['id'], args.canCancel, dry_run=args.dry_run)
+  File "challenge.py", line 240, in validate
+    status = update_single_submission_status(status, add_annotations)
+  File "challenge.py", line 103, in update_single_submission_status
+    privateAnnotations = {each['key']:each['value'] for annots in existingAnnotations for each in existingAnnotations[annots] if annots not in ['scopeId','objectId'] and each['isPrivate'] == True}
+TypeError: 'NoneType' object is not iterable
+
+validating 9616524 jeddy_activity-1.txt
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15788286', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T18:41:01.640Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162658', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162658', u'subject': u'Exception while scoring submission to CSBC Summer Research Program miniDREAM Challenge'}
+
+done:  2017-06-14T18:41:02.395508
+=========================================================================== 
+
+
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:41:02.903422
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+done:  2017-06-14T18:41:06.667983
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:45:14.720856
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+validating 9616524 jeddy_activity-1.txt
+validating 9616525 jeddy_activity-1.txt
+validating 9616526 jeddy_activity-1.txt
+validating 9617681 jeddy_activity-1.txt
+
+done:  2017-06-14T18:45:24.571677
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T18:45:25.447284
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+scored: 9616524 jeddy_activity-1.txt 2223305 {'score': -2.8392, 'rmse': 3700.841847776835}
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789586', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T18:45:32.445Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162659', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162659', u'subject': u'Scored submission to 2017 CSBC mini-DREAM'}
+scored: 9616525 jeddy_activity-1.txt 2223305 {'score': -2.8392, 'rmse': 3700.841847776835}
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789588', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T18:45:37.207Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162660', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162660', u'subject': u'Scored submission to 2017 CSBC mini-DREAM'}
+scored: 9616526 jeddy_activity-1.txt 2223305 {'score': -0.5824, 'rmse': 2375.9570682734711}
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789592', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T18:45:42.472Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162661', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162661', u'subject': u'Scored submission to 2017 CSBC mini-DREAM'}
+scored: 9617681 jeddy_activity-1.txt 2223305 {'score': -0.5824, 'rmse': 2375.9570682734711}
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789594', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T18:45:46.697Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162662', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162662', u'subject': u'Scored submission to 2017 CSBC mini-DREAM'}
+
+
+done:  2017-06-14T18:45:47.228660
+=========================================================================== 
+
+
+  File "challenge.py", line 294
+    score['activity'] = 'Activity {}'.format(re.search('(?<=activity\-)[0-9]', file_handle).group())}
+                                                                                                    ^
+SyntaxError: invalid syntax
+  File "challenge.py", line 294
+    score['activity'] = 'Activity {}'.format(re.search('(?<=activity\-)[0-9]', file_handle).group())}
+                                                                                                    ^
+SyntaxError: invalid syntax
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T19:41:10.338541
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+validating 9617681 jeddy_activity-1.txt
+
+done:  2017-06-14T19:41:14.632172
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T19:41:15.504643
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+Error scoring submission jeddy_activity-1.txt 9617681:
+Traceback (most recent call last):
+  File "challenge.py", line 309, in score
+    status = update_single_submission_status(status, add_annotations)
+  File "challenge.py", line 117, in update_single_submission_status
+    raise ValueError("You are trying to add public annotations that are already part of the existing private annotations: %s.  Either change the annotation key or specify force=True" % ", ".join([key for key in privateAnnotations if key in publicAddedAnnotations]))
+ValueError: You are trying to add public annotations that are already part of the existing private annotations: rmse, team, score.  Either change the annotation key or specify force=True
+
+/home/ubuntu/CSBCminiDREAM/scoring_harness/messages.py:131: UserWarning: Missing template variable {queue_name}
+  warnings.warn("Missing template variable %s" % value)
+scored: 9617681 jeddy_activity-1.txt 2223305 {'score': -0.582, 'rmse': 2375.957}
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789695', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T19:41:22.185Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162666', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162666', u'subject': u'Exception while scoring submission to {queue_name}'}
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789697', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T19:41:26.573Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162667', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162667', u'subject': u'Exception while scoring submission to 2017 CSBC mini-DREAM'}
+
+
+done:  2017-06-14T19:41:27.787422
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T19:50:41.804026
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+validating 9617681 jeddy_activity-1.txt
+
+done:  2017-06-14T19:50:45.899691
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T19:50:46.779934
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+Error scoring submission jeddy_activity-1.txt 9617681:
+Traceback (most recent call last):
+  File "challenge.py", line 308, in score
+    add_annotations = synapseclient.annotations.to_submission_status_annotations(score, is_private=False, force=True)
+TypeError: to_submission_status_annotations() got an unexpected keyword argument 'force'
+
+/home/ubuntu/CSBCminiDREAM/scoring_harness/messages.py:131: UserWarning: Missing template variable {queue_name}
+  warnings.warn("Missing template variable %s" % value)
+scored: 9617681 jeddy_activity-1.txt 2223305 {'score': -0.582, 'rmse': 2375.957}
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789807', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T19:50:53.885Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162668', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162668', u'subject': u'Exception while scoring submission to {queue_name}'}
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789808', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T19:50:58.266Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162669', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162669', u'subject': u'Exception while scoring submission to 2017 CSBC mini-DREAM'}
+
+
+done:  2017-06-14T19:50:58.895951
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T19:53:02.061525
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+validating 9617681 jeddy_activity-1.txt
+
+done:  2017-06-14T19:53:06.323792
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T19:53:07.206237
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+scored: 9617681 jeddy_activity-1.txt 2223305 {'score': -0.582, 'rmse': 2375.957}
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789852', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T19:53:15.752Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162670', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162670', u'subject': u'Scored submission to 2017 CSBC mini-DREAM'}
+
+
+done:  2017-06-14T19:53:17.148886
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T19:59:02.144656
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+validating 9617681 jeddy_activity-1.txt
+
+done:  2017-06-14T19:59:07.219390
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T19:59:08.095453
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+scored: 9617681 jeddy_activity-1.txt 2223305 {'score': -0.582, 'rmse': 2375.957}
+sent:  {u'withUnsubscribeLink': False, u'fileHandleId': u'15789852', u'recipients': [u'2223305'], u'createdOn': u'2017-06-14T19:59:14.497Z', u'withProfileSettingLink': True, u'inReplyToRoot': u'162672', u'createdBy': u'2223305', u'isNotificationMessage': False, u'id': u'162672', u'subject': u'Scored submission to 2017 CSBC mini-DREAM'}
+
+
+done:  2017-06-14T19:59:15.027464
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T20:00:02.365075
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+done:  2017-06-14T20:00:10.231395
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T20:00:11.120976
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+done:  2017-06-14T20:00:13.841069
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T20:01:02.746560
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+done:  2017-06-14T20:01:05.810035
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T20:01:06.690214
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+done:  2017-06-14T20:01:10.440279
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T20:02:02.357482
+Welcome, James Eddy!
+
+
+
+Validating 9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+done:  2017-06-14T20:02:05.210130
+=========================================================================== 
+
+
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Loading required package: pROC
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: Type 'citation("pROC")' for a citation.
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: 
+Attaching package: ‘pROC’
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+/usr/lib/python2.7/dist-packages/rpy2/robjects/functions.py:106: UserWarning: The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+
+  res = super(Function, self).__call__(*new_args, **new_kwargs)
+File upload is deprecated for client version 1.5.0 to 1.6.1.  Please check that you are using the latest version of the Synapse client.
+
+
+===========================================================================
+2017-06-14T20:02:06.078302
+Welcome, James Eddy!
+
+
+
+Scoring  9604686 2017 CSBC mini-DREAM
+------------------------------------------------------------
+
+
+done:  2017-06-14T20:02:09.695970
+=========================================================================== 
+
+
