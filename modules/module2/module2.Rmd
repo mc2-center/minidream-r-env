@@ -38,56 +38,15 @@ glimpse(activity_clinical_df)
 
 ## Checking and fixing data types
 
-As an analyst or data scientist preparing to build some models with this data, there are a few things one might notice. The data types for most of the 30 variables seem to match what we would expect. For example, `age_at_diagnosis` is a continuous variable, so R treats the values as `double` (or `dbl` for short) — you can generally think of `double` values as numerics with decimals, whereas `integer` values are whole numbers (see the `T` variable, which represents survival time in days). On the other hand, variables like `last_follow_up_status` and `histological_type` are represented as "characters", which is what we want for anything we might use to specificy different "categories". 
+As an analyst or data scientist preparing to build some models with this data, there are a few things one might notice. Fortunately, the data types for the 31 variables seem to match what we would expect. For example, `age_at_diagnosis` is a continuous variable, so R treats the values as `double` (or `dbl` for short) — you can generally think of `double` values as numerics with decimals, whereas `integer`/`int` values are whole numbers or *counts* (see the `T` variable, which represents survival time in days). On the other hand, variables like `last_follow_up_status` and `histological_type` are represented as "characters" (`chr`), which is what we want for anything we might use to specificy different "categories". Finally, some status indicators such as `survival_5y` ("did the patient survive at least 5 years from diagnosis?") are encoded as `logical`/`lgl` values "TRUE" or "FALSE".
 
-You might notice that none of the variables here are **factors** — we specifically told R not to convert anything into factors when reading in the data. This is OK! It's typically easier to create factors later on as needed, rather than try to change data from factors into a different type.
+This data has actually been cleaned up ahead of time, which is part of the reason why we don't need to worry about fixing data types here. However, the above examples give you an idea of things to look for when inspecting a new dataset.
 
-Unfortunately, there are some cases here where R has determined values are characters when a different type might be more appropriate. In particular, let's take a closer look at `lymph_nodes_positive`, `lymph_nodes_removed`, and `survival_5y`:
-
-
-```{r}
-# subset the table columns and glimpse
-glimpse(activity_clinical_df[, c("lymph_nodes_positive", "lymph_nodes_removed", "survival_5y")])
-```
-
-The two `lymph_nodes` variables look like they should represent *counts* of something, and so we probably want these to be `integer` values. Meanwhile, `survival_5y` shows "True" and "False" as strings, but we know there's a better way in R to store these Boolean values: the `logical` data type.
-
-For the `character` to `integer` conversion, there's a straightforward function we can use called `as.integer()`:
-
-```{r}
-head(activity_clinical_df$lymph_nodes_positive)
-as.integer(head(activity_clinical_df$lymph_nodes_positive))
-```
-
-We can perform a similar conversion for `survival_5y` using the `as.logical()` function:
-
-```{r}
-head(activity_clinical_df$survival_5y)
-as.logical(head(activity_clinical_df$survival_5y))
-```
-
-Now let's go ahead and convert the full columns in our data frame.
-
-```{r}
-# update lymph_nodes_positive
-activity_clinical_df$lymph_nodes_positive <- as.integer(activity_clinical_df$lymph_nodes_positive)
-
-# update lymph_nodes_removed
-activity_clinical_df$lymph_nodes_removed <- as.integer(activity_clinical_df$lymph_nodes_removed)
-
-# update survival_5y
-activity_clinical_df$survival_5y <- as.logical(activity_clinical_df$survival_5y)
-```
-
-When we ran that code, we got two *warning* messages from R about "NAs" being introduced by coercion (coercion is the technical name for changing the type of a variable). While this kind of warning would typically require some follow-up investigation, we'll spoil the surprise for you: each of the `lymph_nodes` variables included the value `"null"` for some samples. So, what happens when we try to convert `"null"` into an integer?
-
-```{r}
-as.integer("null")
-```
-
-Basically, R doesn't know how to represent this string as a number, and decides to treat it as `NA` or "not available" instead. `NA` is a special type of value in R that is often used to indicate "missing data". Identifing and handling missing data is another important part of any statistical analysis. 
+You might also notice that none of the variables here are **factors** — we specifically told R not to convert anything into factors when reading in the data. This is OK! It's typically easier to create factors later on as needed, rather than try to change data from factors into a different type.
 
 ## Dealing with missing values
+
+Even though the types of our variables look good, there are several columns with multiple values that look like "NA"... `NA` (which stands for “not available”) is a special type of value in R that is often used to indicate “missing data”. Identifing and handling missing data is another important part of any statistical analysis.
 
 While there are lots of more sophisticated approaches to dealing with `NA`s in a dataset, we'll keep things simple for now and remove any variables that include `NA` values. In other words, if any of our clinical measurements or charateristics are unavailable for some samples, we won't consider those variables when building our models.
 
@@ -146,7 +105,37 @@ activity_clinical_df <- activity_clinical_df[, !all_vars %in% na_vars]
 glimpse(activity_clinical_df)
 ```
 
-With our subsetted table and corrected data types, we're ready to move on to the next step!
+## Checking output variables
+
+Before trying to model a certain response or outcome, it's useful to first understand a bit more about the characteristics of that outcome variable. We ultimately want to predict survival time (`T`) for the patients in our data, which we saw above is a numeric variable. 
+
+While there's nothing too remarkable or unexpected about `T`, we also have some complementary information about patient outcome: `last_follow_up_status`. Let's take a closer look at the values in this field with the `unique()` functions, which returns the *unique* set of values.
+
+```{r}
+unique(activity_clinical_df$last_follow_up_status)
+```
+
+These values are abbreviations for the following statuses:
+
++ `a` = alive
++ `d` = died of disease
++ `d-d.s.` = died of disease
++ `d-o.c.`= died of other causes
+
+In other words, the time for some patients simply represents the number of days between their initial diagnosis and their last follow-up appointment in the study — even if they were alive! For patients who were still living at last follow-up or who died of other causes (could be old age, a car crash, or anything), trying to model "survival time" wouldn't be very informative or tell us much about breast cancer outcome.
+
+These cases, where we don't know exactly when or if patients ultimately died due to breast cancer, are known as "censored" events. There are sophisticated statistical techniques for modeling censored data that allow for a more comprehensive prediction of survival outcome, but they're beyond the scope of this course.
+
+Instead, we'll remove censored samples from the data and focus on predicting survival time for patients who we know died of disease.
+
+```{r}
+activity_clinical_sub_df <- activity_clinical_df[!activity_clinical_df$censored, ]
+nrow(activity_clinical_sub_df)
+```
+
+This unfortunately only leaves us with 439 samples to train our models — but that's still more than a lot of studies!
+
+With our subsetted table, we're ready to move on to the next step.
 
 ---
 
@@ -155,30 +144,34 @@ With our subsetted table and corrected data types, we're ready to move on to the
 It can often be helpful to visualize data distributions with a plot. In this example we will explore two quick ways to visualize data that is continuous or discrete. We will use the age and stage fields in our data for this demonstration. The age data is continuous which we can see by simply plotting the unsorted values in the field and understanding there appears to be no pattern suggesting a discrete distribution of the data.
 
 ```{r}
-plot(activity_clinical_df$age_at_diagnosis)
+plot(activity_clinical_sub_df$age_at_diagnosis)
 ```
 
 When we plot the stage data however, we clearly see a pattern suggestive of a discrete distribution.
 
 ```{r}
-plot(activity_clinical_df$stage)
+plot(activity_clinical_sub_df$stage)
 ```
 
 If we desire to get a more concrete view of how the age data is distributed we can use a combination of the **plot** function with the **density** distribution which will plot the data as a continuous function. This makes the **density** function an ideal way to visualize continuous data from our data frame.
 
 ```{r}
-plot(density(activity_clinical_df$age_at_diagnosis))
+plot(density(activity_clinical_sub_df$age_at_diagnosis))
 ```
-
-Inspecting this plot suggests there is a slight bimodal distribution (i.e., a mixture of **two** underlying distributions) to the age of diagnosis. Take a minute to ponder what this bimodal distribution may suggest...
 
 Now if we wish to get a more global view of the stage data, we want to take a different approach. Because the stage data is discrete, we want to utilize a plot that illustrates the discrete nature of the data. We can do this by combining the **table** and **barplot** commands. The **table** command enumerates the occurrences of each value in the stage data. The **barplot** function displays a barplot of the enumeration from the **table** command. Let's walk through an example to make this clear.
 
 ```{r}
-barplot(table(activity_clinical_df$stage))
+barplot(table(activity_clinical_sub_df$stage))
 ```
 
 As we can see most of the data is composed of samples of stage 0. Knowing the demographics of our data is oftentimes crucial for any analysis of the data. Combining summary statistics with visualizations like those shown above represents a crucial first step in any analysis. 
+
+Try to generate a new bar plot for HER2 expression status (`Her2.Expr`) with `table()` by filling in the missing code here:
+
+```{r}
+barplot(_____(activity_clinical_sub_df$_____))
+```
 
 ---
 
@@ -188,18 +181,18 @@ As we can see most of the data is composed of samples of stage 0. Knowing the de
 
 After we have read in and inspected our data, we typically want to leverage it for some task. One task could be to build a predictive model from the data. These models can range from simple to complicated — and a model's use is very much dictated by the nature, quantity, and complexity of the data and task at hand. In general it is good practice to try and use the simplest model that accomplishes the task optimally. Among the workhorses of such models is the **linear regression**. 
 
-Linear regression models take the canonical form of `y = mx + b`. In this classic model the dependent variable `y` is predicted by a single independent variable `x` which is multiplied by a *learned* slope coefficent `m`. The model intercepts the y-axis at point `b`. Now, this model can be expanded to have multiple independent variables with multiple learned `m` coefficents (multivariate linear regression), but for our purposes today we will simply try and model, from the data, the survival of a patient at 5 years (dependent variable) as a function of their age of diagnosis (independent variable).
+Linear regression models take the canonical form of `y = mx + b` — when you perform linear regression, you're literally finding the **line** that best fits the data. In this classic model, the dependent variable `y` is predicted by a single independent variable `x` which is multiplied by a *learned* slope coefficent `m`. The model intercepts the y-axis at point `b`. Now, this model can be expanded to have multiple independent variables with multiple learned `m` coefficents (multivariate linear regression), but for our purposes today we will simply try and model, from the data, the survival of a patient at 5 years (dependent variable) as a function of their age of diagnosis (independent variable).
 
 To do this we will use R's **`lm()`** command which is the on-board **linear model** function avaliable in R. Let's start with an example and expand from there.
 
 ```{r}
-lm(formula = activity_clinical_df$T ~ activity_clinical_df$age_at_diagnosis)
+lm(formula = activity_clinical_sub_df$T ~ activity_clinical_sub_df$age_at_diagnosis)
 ```
 
 In this example the formula (y = mx + b) is a hardcoded word for the function which specifies the function to be used. The dependent variable is `activity_clinical_df$T` (survival time) and it is only the left side of the `~` which serves as the equality. On the right side of the `~` is the independent variables which in our case is just `activity_clinical_df$age_at_diagnosis`. The coefficient for the coefficent and the y-intercept are both learned or *trained* by the model through a error minimization procedure (method of least squares is one such method). We can make the command simpler by adding a data parameter which simply tells the linear model which object in the R enviroment represents the data. We'll also save our model to a new variable, so we can access it more easily.
 
 ```{r}
-age_model <- lm(formula = T ~ age_at_diagnosis, data = activity_clinical_df)
+age_model <- lm(formula = T ~ age_at_diagnosis, data = activity_clinical_sub_df)
 age_model
 ```
 
@@ -208,13 +201,13 @@ age_model
 What does this output mean? Recall that the `lm()` function is trying to learn two parameters for a *line* that explains the trend of survival time (`T`) in relation to `age_at_diagnosis`: the intercept, `b`, and slope, `m`, such that we end up with the equation `T ~ m*age_at_diagnosis + b`. We can actually view this trend (and the fitted line) with another plot:
 
 ```{r}
-plot(activity_clinical_df$age_at_diagnosis, activity_clinical_df$T)
-abline(4055.79, -14.55)
+plot(activity_clinical_sub_df$age_at_diagnosis, activity_clinical_sub_df$T)
+abline(1201.37, 13.62)
 ```
 
-The estimated slope or **coefficient** for `age_at_diagnosis` in the model, `-14.55` predicts that *for every 1-year increase in diagnosis age, survival time will decrease by about 14 days. This result (and the plot of the trend) probably aren't especially impressive, but let's see if we can evaluate our model in a more systematic way.
+The estimated slope or **coefficient** for `age_at_diagnosis` in the model, `13.62` predicts that *for every 1-year increase in diagnosis age, survival time will increase by about 14 days. Can you think of why survival time might tend to be higher for patients who were diagnosed at increasingly older ages?
 
-If we want to get an assessment for how good our model is there are a few things we can do. The first and simpliest is to simply use the **`summary()`** command again.
+The trend of survival time relative to diagnosis age isn't especially strong, but let's see if we can evaluate our model in a more systematic way. If we want to get an assessment for how good our model is there are a few things we can do. The first and simpliest is to simply use the **`summary()`** command again.
 
 ```{r}
 summary(age_model)
@@ -224,36 +217,19 @@ This command will give a lot of informative output, but a quick way to assess th
 
 ## Adding more information to our model
 
-If we take a closer look at the scatterplot above, we can see that patients who are either on the young end or old end of the diagnosis age range tend to have lower survival times, creating almost a hump-shaped trend in the data. We might be able to use this observation to get a slightly better predictor for survival time.
-
-First, we can use the `quantile()` function to find the *percentiles* for certain ages in the data. For example, the 5% or 5th-percentile diagnosis age says that "only 5% of values fall below this age"; in contrast the 95% or 95th-percentile says "95% of values fall below this age" (which means that only 5% fall above it). This is a useful way of finding the "extreme" ranges in a distribution. Note that the 0% and 100% quantiles represent the minimum and maximum value, respectively.
+While diagnosis age could be associated with breast cancer outcome for a number of reasons, there are other clinical variables that might be more predictive of survival time. For example, let's try to incorporate what we know about the *severity* of tumors based on the `stage` variable. We'll include this additional term or **covariate** in our model equation, which is our first example of "multivariate" modeling.
 
 ```{r}
-age_ranges <- quantile(activity_clinical_df$age_at_diagnosis, 
-                      probs = c(0, 0.05, 0.95, 1))
-age_ranges
+age_stage_model <- lm(T ~ age_at_diagnosis + stage, data = activity_clinical_sub_df)
+summary(age_stage_model)
 ```
 
-We can define a new variable called `diagnosis_age_extreme`, which is a *categorical* variable indicating whether or not patients were very young or very old at the time of diagnosis.
+Some takeaways from this model: the estimated coefficient for `stage == 4` is much larger in magnitude than `age_at_diganosis`. In other words, being diagnosed with a stage 4 tumor is predicted to be associated with a decrease in survival time of over 1129 days (over 3 years)! The p-value estimated for this coefficient is also much smaller, indicating more confidence that the effect is non-zero. Finally, our adjusted R-squared value has increased to ~0.05, indicating that our model explains about 5% of the variance in the data. This still isn't great, but it's a 500% improvement from looking at the overall age trend!
+
+Instead of a scatterplot, we can use a **boxplot** to view the difference in survival times between patients based on stage.
 
 ```{r}
-activity_clinical_df$diagnosis_age_extreme <- activity_clinical_df$age_at_diagnosis < 40 | activity_clinical_df$age_at_diagnosis > 80
-activity_clinical_df$diagnosis_age_extreme
-```
-
-Now, let's see what happens when we predict survival time based on whether patients were either very young or very old at the time of diagnosis.
-
-```{r}
-age_group_model <- lm(T ~ diagnosis_age_extreme, data = activity_clinical_df)
-summary(age_group_model)
-```
-
-Some takeaways from this model: the estimated coefficient for `diagnosis_age_extreme == TRUE` is much larger in magnitude. In other words, being diagnosed either before 40 years old or after 80 years old is predicted to be associated with a decrease in survival time of over 944 day (nearly 3 years)! The p-value estimated for this coefficient is also much smaller, indicating more confidence that the effect is non-zero. Finally, our adjusted R-squared value has increased to ~0.03, indicating that our model explains about 3% of the variance in the data. This still isn't great, but it's a 300% improvement from looking at the overall age trend!
-
-Instead of a scatterplot, we can use a **boxplot** to view the difference in survival times between patients with extreme diagnosis ages (`TRUE`) and everyone else (`FALSE`).
-
-```{r}
-boxplot(T ~ diagnosis_age_extreme, data = activity_clinical_df)
+boxplot(T ~ stage, data = activity_clinical_df)
 ```
 
 ---
@@ -270,18 +246,18 @@ Again, for the mini-DREAM challenge submissions, we'll be using a separate, spec
 load("/home/shared/data/metabric_split/challenge_data.RData", verbose = TRUE)
 ```
 
-Because our model predicts survival time based on whether or not patients fall into the extreme groups for diagnosis age, we'll need to add this information to the challenge data frame.
+Because we only want to predict survival time for those patients who ultimately die of cancer, let's subset the challenge data as well to removed censored samples.
 
 ```{r}
-challenge_clinical_df$diagnosis_age_extreme <- challenge_clinical_df$age_at_diagnosis < 40 | challenge_clinical_df$age_at_diagnosis > 80
+challenge_clinical_sub_df <- challenge_clinical_df[!challenge_clinical_df$censored, ]
 ```
 
-Now, we can use the `predict.lm()` function, which will use the coefficient and estimate we learned from the `activity_clinical_df` data above, apply this information to the `diagnosis_age_extreme` variable in the challenge data frame, and predict survival time for this cohort of 434 patients.
+Now, we can use the `predict.lm()` function, which will use the coefficient and estimate we learned from the `activity_clinical_df` data above, apply this information to the `age_at_diagnosis` and `stage` variables in the challenge data frame, and predict survival time for this cohort of 162 patients.
 
 ```{r}
-prediction <- data.frame(METABRIC_ID = challenge_clinical_df$METABRIC_ID, 
-                         T = predict.lm(age_group_model, 
-                                        newdata = challenge_clinical_df))
+prediction <- data.frame(METABRIC_ID = challenge_clinical_sub_df$METABRIC_ID, 
+                         T = predict.lm(age_stage_model, 
+                                        newdata = challenge_clinical_sub_df))
 prediction
 ```
 
