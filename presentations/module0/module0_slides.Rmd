@@ -1,0 +1,313 @@
+---
+title: "Module 0 - Welcome, setup, & orientation"
+author: "James Eddy"
+date: "6/12/2017"
+output: 
+  revealjs::revealjs_presentation:
+    theme: sky
+    reveal_options:
+      slideNumber: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<section class="titleslide level1">
+<h1>Navigating Slides</h1>
+
+If you see a blue **down** arrow in the bottom right corner of the screen, you can click that arrow to advance to the next slide in the current section.
+
+```{r, out.width="150px", echo=FALSE}
+knitr::include_graphics("down-arrow.png")
+```
+
+## Moving between sections
+
+If the down arrow is grayed out, you're at the end of the section. Click the **right** arrow to continue on to the next section.
+
+```{r, out.width="150px", echo=FALSE}
+knitr::include_graphics("right-arrow.png")
+```
+
+> Quick tip: any of the links in this and other presentations will open in a new window or tab (depending on your browser). To return to this page, just close the new window/tab when you're done.
+
+</section>
+
+# The mini-DREAM Challenge
+
+## Why are you here?
+
+- To complement your research projects with the **CSBC/PS-ON Summer Research Program**...
+
+- Our goals for this mini-DREAM Challenge are to:
+    - Introduce you to **data science** and **basic model building**
+    - Educate you on **cancer** and some specific biology related to breast cancer
+    - Guide you through realistic analysis activities to solve common problems
+
+## But what's a "challenge"?
+
+- Crowd-sourced data challenges (e.g., Kaggle): participants submit their own attempts to answer complex questions from a common dataset
+
+```{r, out.width="300px", echo=FALSE}
+knitr::include_graphics("dream-logo.png")
+```
+
+- **DREAM Challenges** (<a href="http://dreamchallenges.org/" target="_blank">website</a>): focused on biomedical datasets and questions, with the goal of improving ability to understand and predict disease outcomes
+
+- Open, incentivized competitions through DREAM have led to important insights and benchmarks
+
+## Breast Cancer Prognosis DREAM Challenge
+
+- Goal: assess accuracy of computational models designed to predict **breast cancer survival** based on clinical information as well as genome-wide molecular measurement data
+
+- **METABRIC dataset**: 2,000 breast cancer samples, 1,000 of which were provided to participants to train models
+
+- Solutions improved over duration of the challenge; results and lessons from challenge published in 2013:
+    - Margolin, et al. *Science Translational Medicine*
+    - Cheng, et al. *Science Translational Medicine*
+
+## CSBC mini-DREAM Challenge
+
+- Same data and questions as original Breast Cancer Prognosis DREAM Challenge
+
+- ***You*** will work with the data and step through the process of building predictive models for cancer survival
+
+- Module lectures will cover basics of concepts related to computational modeling and breast cancer
+
+# Course Roadmap
+
+## Challenge modules
+
+What to expect (also on <a href="https://www.synapse.org/#!Synapse:syn8650663/wiki/436427" target="_blank">**Challenge Modules**</a> page):
+
+- **Module 0**: Welcome, setup, & orientation
+- **Module 1**: Introduction to R
+- **Module 2**: Introduction to breast cancer & basic modeling
+- **Module 3**: Working with genomic data
+- **Module 4**: The curse of dimensionality
+- **Module 5**: Integrating biological knowledge
+
+If this doesn't make sense to you right now, that's OK!
+
+*Each module builds on the previous &mdash; designed to guide you step-by-step through what you need to do.*
+
+## Challenge activities
+
+- Each module includes a hands-on programming activity in **R**
+
+- As part of activities, you'll submit your own predictions to the Challenge
+
+- Results show up on scoreboards, but this **isn't a competition**! We'll teach you exactly how to build models &mdash; scoreboards are just a fun way to track your progress.
+
+## Beyond mini-DREAM
+
+What to do after this course?
+
+- Learn more about R, data science, and computational biology! (lots of free resources online)
+- Participate in a real DREAM Challenge
+- Use these approaches in your own research
+
+# Navigating the mini-DREAM Synapse site
+
+## Important locations
+
+Some notes on how to find things...
+
+## Important locations — Getting started
+
+```{r out.width="600px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("gettingstarted1.png")
+```
+
+## Important locations — Home page
+
+```{r out.width="600px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("gettingstarted2.png")
+```
+
+## Important locations — Modules
+
+```{r out.width="600px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("challengemodules.png")
+```
+
+## Important locations — Background
+
+```{r out.width="600px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("challengeoverview.png")
+```
+
+## Other important locations
+
+- Discussion boards
+- Scoreboards
+- Additional resources
+
+# Course Setup
+
+## Getting registered
+
+Before diving into the course, we'll need to pause for a moment and make sure that everyone is ***registered*** on Synapse and for the mini-DREAM Challenge.
+
+## Registering for Synapse
+
+Most of you should already be registered on Synapse. If not, move ahead to the next slide and follow the instructions to register for the Challenge (you'll be asked to register for Synapse in the process).
+
+## Registering for the Challenge
+
+Instructions for registering for the **mini-DREAM Challenge** can be found <a href="https://www.synapse.org/#!Synapse:syn8650663/wiki/436444" target="_blank">**here**</a>. 
+
+When we get to **Module 1**, you'll need to be registered (and certified) in order to submit predictions to the challenge for scoring. *Consider this your homework assignment before the next meeting.*
+
+# R
+
+## What is R?
+
+- Powerful programming language designed for doing statistical analyses
+
+- Great tools for exploring, visualizing, and manipulating data
+
+- Open source: free to use, with huge community that is constantly contributing new packages
+
+## Why use R?
+
+- Widely used by data scientists in technology industries and academic research
+
+- Rich ecosystem of tools for specific data types and applications (e.g., **Bioconductor** packages for computational biology)
+
+- Get a job? R was 3rd highest paid programming language in 2016 (<a href="http://www.business2community.com/tech-gadgets/15-highest-paying-programming-languages-2016-01559832" target="_blank">Business2Community</a>)
+
+## Why not use ____?
+
+- Python also widely used for data science (and plenty of other software applications)
+
+- Other relevant languages for modeling? Matlab, Julia, Java, Perl
+
+- R still more popular in biomedical research community (and it's what *we* use for most analysis), but above languages can be great too!
+
+## How will I use R for the mini-DREAM Challenge?
+
+- No prior programming knowledge required!
+
+- Most mini-DREAM R activities will provide code for you &mdash; just point and click
+
+- Goal is to show you what R does and how it can help you, not teach you how to program in R (which could take an entire summer by itself)
+
+# RStudio
+
+## mini-DREAM activities environment
+
+- Module activities will use a shared RStudio workspace for working with R code
+
+- Environment located on a "cloud" computing machine in Amazon EC2
+
+- No need to install or download anything; all required packages and data pre-loaded
+
+```{r out.width="500px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("environment.png")
+```
+
+## What is RStudio? 
+
+- **RStudio** is an Integrated Development Environment (IDE): create, view, and explore code, variables, files, plots, etc. all in one application
+
+
+```{r out.width="400px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("rstudio.png")
+```
+
+- RStudio also provides lots of helpful features that make writing R code easier
+
+## RStudio — Layout
+
+When you start RStudio, you will get a view similar to what is shown below with perhaps slight differences.
+
+```{r out.width="650px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("rstudio-home.png")
+```
+
+## RStudio — Help
+
+A lot of information is available in RStudio in the (searchable) help tab — feel free to investigate.
+
+```{r out.width="650px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("rstudio-help.png")
+```
+
+## RStudio — Commands
+
+You can type commands directly into the console.
+
+```{r out.width="650px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("rstudio-command1.png")
+```
+
+## RStudio — Workspace
+
+Outputs will be saved in the current workspace.
+
+```{r out.width="650px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("rstudio-command2.png")
+```
+
+## RStudio — Projects
+
+We'll be using RStudio *projects* to keep things organized.
+
+```{r out.width="650px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("rstudio-projects1.png")
+```
+
+## RStudio — Projects
+
+Switching projects changes the folder you're working in.
+
+```{r out.width="650px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("rstudio-projects2.png")
+```
+
+## RStudio — R Notebooks
+
+mini-DREAM activities are based in **R Notebooks**, which have `.Rmd` ... more on this in **Activity 0**.
+
+```{r out.width="650px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("rstudio-notebook.png")
+```
+
+## RStudio — R Notebooks
+
+For each activity, you'll read along and run sections of code in "chunks".
+
+```{r out.width="650px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("rnotebook-chunk1.png")
+```
+
+## RStudio — R Notebooks
+
+Output from each chunk will be displayed directly below the code, and saved in the workspace.
+
+```{r out.width="650px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("rnotebook-chunk2.png")
+```
+
+## RStudio — R Notebooks
+
+You can inspect the contents of outputs by clicking on object names.
+
+```{r out.width="650px", out.extra='style="background:none; border:none;"', echo=FALSE}
+knitr::include_graphics("rstudio-workspace.png")
+```
+
+
+# What next?
+
+## Resources
+
+- Want to learn more about R? Take some time to flip through <a href="http://www.biostat.jhsph.edu/~ajaffe/docs/undergradguidetoR.pdf" target="_blank">The Undergraduate Guide to R</a>.
+
+- We'll also post links to other resources on the Synapse site on the <a href="https://www.synapse.org/#!Synapse:syn8650663/wiki/436426" target="_blank">**Additional Resources**</a> page.
+
+## Activity
+
+You're ready to move on to **Activity 0**!

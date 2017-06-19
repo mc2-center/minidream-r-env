@@ -35,3 +35,9 @@ vignettes/*.pdf
 
 # Data files
 data
+
+# Submissions
+submissions
+
+# Other
+.DS_Store
