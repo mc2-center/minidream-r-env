@@ -137,6 +137,8 @@ This unfortunately only leaves us with 439 samples to train our models — but t
 
 With our subsetted table, we're ready to move on to the next step.
 
+Just as a check, think of a way to find out how many columns are in the data? Put the answer in the response window.
+
 ---
 
 # Plotting data for inspection
@@ -164,6 +166,8 @@ Now if we wish to get a more global view of the stage data, we want to take a di
 ```{r}
 barplot(table(activity_clinical_sub_df$stage))
 ```
+
+Investigate the table function the code above. What does the table function appear to actually do? 
 
 As we can see most of the data is composed of samples of stage 0. Knowing the demographics of our data is oftentimes crucial for any analysis of the data. Combining summary statistics with visualizations like those shown above represents a crucial first step in any analysis. 
 
