@@ -9,6 +9,299 @@ output: html_notebook
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Summary
 
-## Header 1
+# About this activity
+
+This module will introduce you to concepts and approaches to working with high-dimensional data, such as gene expression data. We will focus on dimension reduction techniques, i.e. moving from a high-dimensional context to a lower-dimensional context, and the development of predictive models using .
+
+## A. Overfitting Demonstrated
+Let's pretend there is a gene whose expresion serves as a biomarker of whether the tissue sampled is cancerous or normal tissue, where high expression indicates greater liklihood of cancer. Below, we simulate this condition by sampling from two 'gaussian' distribution, one that is non-cancer (normal) and one that is cancer. Because there is only 1 gene, this is a 1-dimensional problem. The optimal dividing line between cancer & non-cancer is not perfect, but separates vast majority of samples between the two groups.
+
+```{r}
+set.seed(1)
+colors <- c('blue','red')
+normal <- rnorm(50, mean=0, sd=1)
+cancer <- rnorm(50, mean=3, sd=1)
+cls=factor(c(rep("normal",50),rep("cancer",50)),levels=c("normal","cancer"))
+plot(x=c(normal,cancer),y=rep(1, 100),pch=19, col=colors[cls],ylab="",xlab="Cancer_Gene")
+legend("topleft",fill = colors,legend = c("Normal","Cancer"))
+abline(v =1.5,lty=2)
+```
+
+We now simulate a 2nd gene, and add it to the plot. We are now operating in 2 dimension. From the plot, it now becomes apparent that we can easily find a dividing line that separates all points into cancer / non-cancer, even though only the 1st gene is a biomarker. This is an example of how adding more features (dimensions) can lead to overfitting. The more features one adds, the easier it is to develop a model that overfits the data.  One strategy for addressing this is through dimension reduction, which reduces the number of features (dimension) one is using to develop models.
+
+```{r}
+random_gene <- c(rnorm(50, 0, .3), rnorm(50, 1, .3))
+plot(x=c(normal,cancer),y=random_gene,pch=19, col=colors[cls],xlab="Cancer_Gene", ylab="Random_Gene")
+abline(coef = c(1.8,-1),lwd=2)
+legend("topleft",fill = colors,legend = c("Normal","Cancer"))
+```
+
+## Dimension Reduction
+Imagine we have two perfectly correlated genes. Knowledge about 1 gene provides 100% of the knowledge about another. Therefore, no information is lost if one of the genes is removed.
+```{r}
+geneA <- geneB <- rnorm(50, 0, 1)
+geneC <- geneA + rnorm(50, 0, .1)
+par(mfrow=c(1,2))
+plot(x=geneA,y=geneB,pch=19,col="red")
+abline(lm(geneB ~ geneA), lty=2)
+plot(x=geneA,y=geneC,pch=19,col="red")
+abline(lm(geneC ~ geneA), lty=2)
+```
+
+Let's good ahead and look at the overall correlation structure of the Metabric gene expression data. But first, we will start with some very simple feature reduction: we will filter genes that are lowly expressed and do not vary much.  
+```{r}
+expr_matrix <- readRDS("/home/shared/data/metabric_split/activity_uncensored_expr_mat.rds")
+clin_df <- readRDS("/home/shared/data/metabric_split/activity_uncensored_clin_df.rds")
+#expr_matrix <- as.matrix(activity_expression_df[, c(-1,-2)])
+mean_expr <- apply(expr_matrix, 1, mean)
+var_expr <- apply(expr_matrix, 1, var)
+quantile_mean <- median(mean_expr)
+quantile_var <- quantile(var_expr, 0.75)
+
+plot(mean_expr, var_expr, pch=19,cex=.5)
+abline(v=quantile_mean,lty=2,col="red")
+abline(h=quantile_var,lty=2,col="red")
+```
+```{R}
+keep_genes <- mean_expr > quantile_mean & var_expr > quantile_var
+expr_matrix_f1 <- expr_matrix[keep_genes,]
+dim(expr_matrix_f1)
+```
+
+We will examine the overall correlation structure by computing all pairwise gene correlations, and plot their distribution as a density. As a source of comparison, we generate a permuted sample data set, compute their correlations, and plot their density distribution as well.
+```{R}
+GeneCor <- cor(t(expr_matrix_f1))
+# as source of comparison, we'll generated a randomized matrix as well
+RandomCor <- cor(apply(expr_matrix_f1, 1, sample))
+d1 <- density(GeneCor[upper.tri(GeneCor)])
+d2 <- density(RandomCor[upper.tri(RandomCor)])
+plot(d1,main="Gene correlation density", xlim=c(-1,1),ylim=c(0, max(d2$y)),xlab="Correlation")
+lines(d2,col="red")
+legend("topleft",legend = c("Observed","Random"),fill=c("Black","Red"))
+```
+
+Let's take a look at the top two most correlated genes:
+
+```{R}
+diag(GeneCor) <- 0
+idxs <- which(GeneCor== max(GeneCor), arr.ind = TRUE)
+geneA <- expr_matrix_f1[idxs[1],]
+geneB <- expr_matrix_f1[idxs[2],]
+plot(geneA, geneB,xlab=rownames(expr_matrix_f1)[idxs[1]], ylab=rownames(expr_matrix_f1)[idxs[2]],pch=19,cex=.8)
+fit <- lm(geneB~geneA)
+abline(fit,col="red",lty=2,lwd=2)
+mtext(paste0("R^2=",format(summary(fit)$r.squared,digits=3)))
+```
+Already we can see that we can create a 'meta-gene' from these 2 genes using a fitted line. What if there are many groups of highly correlated genes? This is the concept behind Principal Components Analysis (PCA).
+
+```{R}
+# pca
+pca <- prcomp(t(expr_matrix_f1), center = T, scale=F)
+
+#svd
+pc <- svd(expr_matrix_f1 - rowMeans(expr_matrix_f1))
+var_explained <- pc$d^2 / sum(pc$d^2)
+par(mfrow=c(1,2))
+plot(pc$v[,1],pc$v[,2], pch=19, cex=.8,xlab="PC1",ylab="PC2")
+plot(var_explained[1:20],pch=19,type='o', ylab="% variance",xlab="PCs",ylim=c(0,.2))
+```
+We observe that the PCs from PCA and SVD are identical.
+```{R}
+cor(pca$x[,1], pc$v[,1])
+```
+
+To demonstrate how PCA is a multi-purpose tool that can be used to identify and remove unwanted artifacts in the data, we introduce a systematic artifact in half of the Metabric expression data. This simulates the common 'batch' effects seen in molecular data sets, i.e. systematic and unwanted variation associated with technical aspects of the assay and not reflective of interesting or meaningful biology. 
+```{R}
+### simulate technical artifact
+n <- ncol(expr_matrix_f1)
+n1 <- floor(n/2)
+n2 <- n - n1
+Expr1 <- expr_matrix_f1[,1:n1]
+Expr2 <- expr_matrix_f1[,(n1+1):n] + rnorm(n2, mean=1,sd=1)
+## add systematic offset
+badExpr <- cbind(Expr1,Expr2)
+pcBad <- svd(badExpr - rowMeans(badExpr))
+var_explained <- pcBad$d^2 / sum(pcBad$d^2)
+par(mfrow=c(1,2))
+plot(var_explained[1:10],pch=19,type='o', ylab="% variance",xlab="PCs")
+plot(pcBad$v[,1], pcBad$v[,2], xlab="PC1", ylab="PC2", col=c(rep("red", n1), rep("blue", n2)),pch=19,cex=.8)
+
+```
+We observe that the 1st PC characterizes this unwanted artificact, which can be removed by simply removing this PC and then regenerating the data matrix.
+```{R}
+### remove unwanted artifact
+pc$d[1] <- 0
+goodM <- pc$u %*% diag(pc$d) %*% t(pc$v)
+pcGood <- svd(goodM - rowMeans(goodM))
+plot(pcGood$v[,1], pcGood$v[,2], col=c(rep("red", n1), rep("blue", n2)),pch=19,cex=.8)
+```
+
+PCA is also useful for outlier detection.
+```{R}
+# use top 2 PCs for outlier detection, but more dimensions can be used
+library(plotrix)
+#  a sample is marker as outlier if it 
+# is more than 2.5 standard deviations away from the origin
+stdDevAwayFromOrigin <- 2.5
+V = scale(pc$v[,c(1,2)])
+dist <- apply(V,1,function(x){ sqrt(sum(x^2))})
+isOutlier <- dist > stdDevAwayFromOrigin
+lim <- max(c(dist,stdDevAwayFromOrigin))
+plot(V[,1],V[,2],xlim=c(-lim,lim),ylim=c(-lim,lim),asp=1,
+     pch=19,cex=.7,col=c("black","red")[factor(isOutlier)])
+draw.circle(0, 0, stdDevAwayFromOrigin,border="blue",lty=2)
+```
+
+PCA can also be used to assess whether global structure in the data is associated with clinical or biological traits. In the example below, we visualize whether the top 2 PCs are associated with  Estrogen Receptor (ER) status of patients.
+```{R}
+
+plot(pc$v[,1], pc$v[,2], xlab="PC1", ylab="PC2", col=c("red","blue")[factor(clin_df$ER.Expr)],pch=19,main="ER status")
+legend("topleft",legend = c("ER-","ER+"),fill=c("red","blue"))
+```
+
+ACTIVITY: Assess whether top PCs are associated with other clinical variables such as stage or grade of the tumor. You can inspect visually, or do a statistical test.
+
+##Predictive modeling with PCA
+The PCs obtained from PCA on gene expression data are called meta-genes, and can be used as covariates in a predictive model. Here, we add the top 5 PCs to a linear model and assess:
+
+However, before we start modeling, let's examine the distribution of our dependent variable, time-to-death.
+```{R}
+hist(clin_df$T, xlab="Time to death (days)")
+```
+The data looks skewed toward earlier time points
+```{R}
+fit_pc1 <- lm(clin_df$T ~ pc$v[,1])
+plot(clin_df$T ~ pc$v[,1],pch=19)
+abline(fit_pc1,lty=2,col="red",lwd=3)
+```
+
+Let's examine top 5 PCs
+
+```{R}
+summary(lm(clin_df$T ~ pc$v[,1] + pc$v[,2] + pc$v[,3] + pc$v[,4] + pc$v[,5]))
+```
+### Supervised PCA
+```{R}
+clin_df$time_to_death <- clin_df$T
+clin_df$ageGroups <- factor(cut(clin_df$age_at_diagnosis, breaks=c(0, 40, 75, 100)))
+clin_df$isYoung <- clin_df$age_at_diagnosis < 45
+
+trainMask <- clin_df$split_group=="training"
+trainExpr <- expr_matrix_f1[, trainMask]
+testExpr <- expr_matrix_f1[, !trainMask]
+trainClin <- clin_df[trainMask,]
+testClin <- clin_df[!trainMask,]
+
+
+pvals <- apply(trainExpr, 1, function(x){
+  cor.test(x, trainClin$T)$p.value
+})
+
+
+topGeneIdxs <- order(pvals)[1:100]
+topTrainExpr <- trainExpr[topGeneIdxs,]
+unsupPCs <- svd(trainExpr - rowMeans(trainExpr))
+supPCs <- svd(topTrainExpr - rowMeans(topTrainExpr))
+
+trainClin$supPC <- supPCs$v[,1]
+trainClin$unsupPC <- unsupPCs$v[,1]
+fit1 <- lm(time_to_death ~ unsupPC + isYoung, data=trainClin)
+fit2 <- lm(time_to_death ~ supPC + isYoung, data=trainClin)
+fit3 <- lm(time_to_death ~ supPC + unsupPC + isYoung, data=trainClin)
+
+topTestExpr <- testExpr[topGeneIdxs,]
+# generate meta-gene by projecting test data onto the rotation vector defined by U 
+testClin$supPC <- as.vector(supPCs$u[, 1] %*% (topTestExpr - rowMeans(topTrainExpr)))
+testClin$unsupPC <- as.vector(unsupPCs$u[,1] %*% (testExpr - rowMeans(trainExpr)))
+
+# compute predictions on test data and assess correlation as performance metric
+pred1 <- predict(fit1, newdata=testClin)
+R1 <- cor(pred1, testClin$time_to_death)
+
+pred2 <- predict(fit2, newdata=testClin)
+R2 <- cor(pred2, testClin$time_to_death)
+
+pred3 <- predict(fit3, newdata=testClin)
+R3 <- cor(pred3, testClin$time_to_death)
+
+par(mfrow=c(1,3))
+plot(pred1, testClin$time_to_death)
+mtext(paste0("R=",format(R1,digits=2)),side = 3, line=0)
+plot(pred2, testClin$time_to_death)
+mtext(paste0("R=",format(R2,digits=2)),side = 3, line=0)
+plot(pred3, testClin$time_to_death)
+mtext(paste0("R=",format(R3,digits=2)),side = 3, line=0)
+```
+### Other considersations
+There were several 'decisions' that were made in the modeling approach above in the form of modeling parameters. This is often referred to as hyper-parameters. What were some of these choices? What were these hyper-parameters? Would strategies could we take to make more informed decisions about these hyper-parameters?
+
+## BONUS SECTION; non-linear modeling
+
+In all the material so far, we have focused on linear modeling, i.e. fitting a line to data or in the case of classification, finding a separating line (hyper-plane) between 2 conditions. But what if the data is not intrinsically linear?
+
+Consider the following 2-dimensional data, where 'blue' represents samples that are known to have cancer, 'green' are normal samples, and black are 'unknown'. Visually, we can see that there is no way to draw a straight-line separating red from blue. 
+```{R}
+set.seed(1)
+colors <- c('black','green','blue')
+lbls <- c('unknown','normal','cancer')
+t <- seq(from=1, to=3 * pi, 3*pi / 200)
+N <- length(t)
+err <- .2
+perLbl <- .3
+x1 <- t * cos(t) + rnorm(N, mean=0, sd=err)
+y1 <- t * sin(t) + rnorm(N, mean=0, sd=err)
+cls1 <- rep(0,N)
+cls1[sample(N, N  * perLbl)] <- 'cancer'
+
+x2 <- t * cos(t-180) + rnorm(N, mean=0, sd=err)
+y2 <- t * sin(t-180) + rnorm(N, mean=0, sd=err)
+cls2 <- rep(0, N)
+cls2[sample(N, N  * perLbl)] <- 'normal'
+
+X <- c(x1,x2)
+Y <- c(y1,y2)
+cls <- factor(c(cls1, cls2), labels=lbls)
+plot(X,Y, col=colors[cls],pch=19,xlim=c(-10,10),ylim=c(-10,10))
+legend("topright",legend = lbls, fill=colors)
+
+```
+
+To classify the unknown samples as 'cancer' or 'normal', we can use a non-linear approach such as k-nearest neighbors (kNN). This algorithm works by looking at the 'k' closest labeled (non-black) samples, and asking whether most of these are 'cancer' or 'non-cancer'. The unlabelled samples then are classified according to this voting scheme.
+
+Here is example of how to apply kNN to this data set.
+```{R}
+library(class)
+hasLabel <- cls != 'unknown'
+train <- cbind(X,Y)[hasLabel,]
+test <- cbind(X,Y)[!hasLabel,]
+
+# set K to 4
+pred1 <- knn(train, test, cls[hasLabel],k = 4)
+clsPred1 <- cls
+clsPred1[!hasLabel] <- pred1
+
+# set K to 10
+pred2 <- knn(train, test, cls[hasLabel],k = 10)
+clsPred2 <- cls
+clsPred2[!hasLabel] <- pred2
+par(mfrow=c(1,2))
+plot(X,Y, col=colors[clsPred1],pch=19,xlim=c(-10,10),ylim=c(-10,10), main="KNN, K=4")
+plot(X,Y, col=colors[clsPred2],pch=19,xlim=c(-10,10),ylim=c(-10,10), main="KNN, K=10")
+```
+We can now use this same approach in the context of regression, i.e. selecting the value of the sample according to an average (or some other voting scheme) of the 'k' closest samples.
+
+```{R}
+library(FNN)
+pred_knn4 <- knn.reg(t(topTrainExpr), t(topTestExpr), k=4,y=trainClin$time_to_death)$pred
+pred_knn10 <- knn.reg(t(topTrainExpr), t(topTestExpr), k=10,y=trainClin$time_to_death)$pred
+
+R_knn4 <- cor(pred_knn4, testClin$time_to_death)
+R_knn10 <- cor(pred_knn10, testClin$time_to_death)
+
+par(mfrow=c(1,2))
+plot(pred_knn4, testClin$time_to_death)
+mtext(paste0("R=",format(R_knn4,digits=2),", knn=4"),side = 3, line=0)
+plot(pred_knn10, testClin$time_to_death)
+mtext(paste0("R=",format(R_knn10,digits=2),", knn=10"),side = 3, line=0)
+```
