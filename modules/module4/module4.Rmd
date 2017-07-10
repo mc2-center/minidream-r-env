@@ -213,8 +213,12 @@ fit3 <- lm(time_to_death ~ supPC + unsupPC + isYoung, data=trainClin)
 
 topTestExpr <- testExpr[topGeneIdxs,]
 # generate meta-gene by projecting test data onto the rotation vector defined by U 
-testClin$supPC <- as.vector(supPCs$u[, 1] %*% (topTestExpr - rowMeans(topTrainExpr)))
-testClin$unsupPC <- as.vector(unsupPCs$u[,1] %*% (testExpr - rowMeans(trainExpr)))
+testClin$supPC <- as.vector(supPCs$u[, 1] %*% (topTestExpr - rowMeans(topTrainExpr))) / supPCs$d[1]
+testClin$unsupPC <- as.vector(unsupPCs$u[,1] %*% (testExpr - rowMeans(trainExpr))) / unsupPCs$d[1]
+
+#testClin$supPC <- as.vector(supPCs$u[, 1] %*% (topTestExpr))
+#testClin$unsupPC <- as.vector(unsupPCs$u[,1] %*% (testExpr))
+
 
 # compute predictions on test data and assess correlation as performance metric
 pred1 <- predict(fit1, newdata=testClin)
