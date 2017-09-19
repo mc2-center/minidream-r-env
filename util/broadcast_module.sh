@@ -10,11 +10,12 @@
 SHARED_MODULE=$(realpath $1)
 MODULE_NAME=$(basename $SHARED_MODULE)
 GROUP=$2
+SKIP_USER=$3
 
 GROUP_MEMBERS=$(getent group $GROUP)
 GROUP_MEMBERS=$(echo ${GROUP_MEMBERS##*:} | tr "," "\n")
 for user in $GROUP_MEMBERS; do
-    if [[ "$user" != "jeddy" ]]; then
+    if [[ "$user" != "$SKIP_USER" ]]; then
         echo "Copying '${SHARED_MODULE}' to user: ${user}"
         user_home="/home/${user}"
         user_modules="${user_home}/modules"
