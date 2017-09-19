@@ -1,0 +1,150 @@
+---
+title: "mini-DREAM Exercise & Evaluation 1"
+author: "James Eddy"
+date: "7/6/2017"
+output: html_notebook
+---
+
+# About this exercise
+
+It's tough for us to guage how well everyone is following along during the mini-DREAM videoconferences. While we've tried to keep the workload for mini-DREAM minimal outside of the meetings — and have structured activities so that a firm understanding of the programming and stats isn't required — we'd still like to get a sense for what you *are* learning!
+
+This exercise is designed to see what concepts you can recall from previous activities. For each part, you'll need to fill in blanks that look like this "_____" in order to run the chunk without getting an error. Note that the number of blanks *does not* match the number of missing letters in the code. This is "open book" — you can switch between modules in RStudio, or look back at past activities on Synapse to view those notebooks as needed.
+
+If you get stuck or can't figure out a step, use the WebEx chat to ask questions. This exercise isn't about testing you, but is a way for us to see what we might need to focus on extra.
+
+---
+
+# Load some data
+
+You've seen a few different ways to load data into R. Fix the commands in the chunks below to load some of the METABRIC data that we've been using for activities. 
+
+## 1. Load a tab-delimited file
+
+We've mostly been working with an "RData" file to conveniently load both clinical and expression data. However, in **Activity 1**, we also used a different command to load data directly from the original tab-delimited text (`.txt`) file. Use that command here to load the clinical data table.
+
+```{r}
+clinical_table_file <- "/home/shared/data/metabric_split/activity_clinical.txt"
+activity_clinical_df <- read._____(clinical_table_file, delim = _____)
+```
+
+## 2. Load an RData file
+
+Now use the command to load both the clinical and expression tables from the `RData` file.
+
+```{r}
+activity_dataset_file <- "/home/shared/data/metabric_split/activity_data.RData"
+_____(activity_dataset_file)
+```
+
+---
+
+# Inspect the data
+
+We've also covered a number of approaches for checking the structure and type of data, once it's been loaded into R.
+
+## 3. Preview rows in a data frame
+
+Print the first 6 rows of `activity_clinical_df` using a certain function (i.e., not by subsetting the data). 
+
+```{r}
+_____(activity_clinical_df)
+```
+
+## 4. Check the size of the data
+
+Check how many genes are in the expression table (**hint:** think about whether genes are listed in rows or columns of the table and use the corresponding function to count).
+
+```{r}
+_____(activity_expression_df)
+```
+
+## 5. Check variable type
+
+Each of the patients in the data have been assigned a value based on their "intrinsic clustering membership"" determined by METABRIC investigators. Print the type of the corresponding variable in `activity_clinical_df`.
+
+The name of the variable might not be obvious — use another function first to view all column headers in the data frame.
+
+```{r}
+_____(activity_clinical_df)
+```
+
+Now check the type of that variable.
+
+```{r}
+_____(activity_clinical_df$_____)
+```
+
+---
+
+> FAST FORWARD...
+
+(Data cleaning, formatting, arranging, and other various munging tasks are a bit of a learned art. Because you haven't had a lot of direct practice with these operations, we'll skip over this step and load a downstream version of the data that is ready for analysis.)
+
+Just in case you weren't able to load the data above, run this chunk to get the variables you'll need for subsequent steps.
+
+```{r}
+uncensored_clin_df <- readRDS("/home/shared/data/metabric_split/activity_uncensored_clin_df.rds")
+uncensored_expr_mat <- readRDS("/home/shared/data/metabric_split/activity_uncensored_expr_mat.rds")
+```
+
+---
+
+# Make a plot
+
+## 6. Collect expression values for a gene
+
+Print the row in the `uncensored_expr_mat` matrix where we can find expression values for the gene *of your choice*. Replace the text (<fill-in-gene-name-here>) with the gene name you want to use (e.g., AURKA, EGFR, AVP, etc.).
+
+```{r}
+gene_row <- which(rownames(uncensored_expr_mat) _____ "<fill-in-gene-name-here>")
+gene_row
+```
+
+Print the expression value of gene for the 142nd patient in the data.
+
+```{r}
+gene_uncensored <- as.vector(uncensored_expr_mat[gene_row, ])
+gene_uncensored_____142_____
+```
+
+## 7. Plot survival time vs. gene expression
+
+Create a scatterplot that shows survival time (y-axis) as a function of gene expression (x-axis).
+
+```{r}
+_____(uncensored_clin_df$T _____ gene_uncensored)
+```
+
+---
+
+# Build a model
+
+## 8. Fit a linear model
+
+Train a linear regression model for the relationship between survival time and gene expression and save it to the variable `gene_model`.
+
+```{r}
+gene_model <- _____(uncensored_clin_df$T ~ gene_uncensored)
+```
+
+## 9. Inspect model results
+
+Use a function to summarize some of the key details of the model (residuals, coefficients, R-squared, etc.).
+
+```{r}
+_____(gene_model)
+```
+
+---
+
+## Save & upload your notebook
+
+When you're done, save this file and run the chunk below, which will upload the Rmd to Synapse. Nothing gets submitted to the mini-DREAM challenge for this exercise.
+
+```{r}
+library(synapseClient)
+synapseLogin(rememberMe = TRUE)
+notebook_filename <- paste(Sys.getenv("USER"), "exercise1.Rmd", sep = "_")
+exercise1_notebook <- synStore(File(path = notebook_filename, parentId = "syn10163686"))
+```

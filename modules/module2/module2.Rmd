@@ -1,0 +1,286 @@
+---
+title: "Module 2 - Introduction & basic modeling"
+author: "Alex Perez and James Eddy"
+date: "June 22, 2017"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# About this activity
+
+In this activity, we'll be showing you some basic operations for building statistical models in R. We'll also revisit some of the approaches from **Module 1** for inspecting and summarizing data — this time with a more specific focus on making sure our data is tidy and ready for modeling! At the end of the activity, you'll submit a new set of predicted survival times for the **mini-DREAM Challenge** — but this time, the predictions will be based on some of the clinical data you have available.
+
+Just like **Module 0** and **Module 1**, you'll be reading through the notebook and running each code chunk to complete the activity. Read the explanations, look at each output, and think about what's happening. You won't need to understand how exactly the code or the stats are working, but try to get a feel for some of the cause and effect for different steps... and, as always, ask questions if anything is unclear!
+
+---
+
+# Preparing data for analysis
+
+## Loading activity data
+
+In the previous activity, you saw how data could be read into R from a file using one of several `read` functions. To make things a little simpler and quicker when you know you're going to be using the same data over and over again for an analysis, R also allows you to **save** data in `RData` files. In this case, we read the data from multiple tab-delimited `.txt` files using the `read.delim()` function, then saved the resulting data frames into a new file called `activity_data.RData`. Now, we can access these data frames simply using the `load()` command, without needing to worry as much about the specific format of the original file.
+
+```{r}
+load("/home/shared/data/metabric_split/activity_data.RData", verbose = TRUE)
+```
+
+That loaded two data frames (note the `df` abbreviation in the variable names): `activity_clinical_df` and `activity_expression_df`. The first includes clinical data for **1310** samples that we'll be using to explore concepts during the activity. The second table includes *gene expession* data, which we'll start working with in **Module 3**.
+
+Last time, we saw how to use the `class()` function to check the data types for variables or columns in a table. R also has some handy functions for quickly summarizing the *structure* of objects, whether they're data frames, lists, vectors, or individual values. One of these is the `glimpse()` function that's available in a package named **`tibble`**, which includes lots of other useful tools for working with tables. **Note:** R has a very similar built-in function called `str()`, but the output of `glimpse()` can be a little easier to read in some cases. Let's try it out with `activity_clinical_df`:
+
+```{r}
+library(tibble)
+glimpse(activity_clinical_df)
+```
+
+## Checking and fixing data types
+
+As an analyst or data scientist preparing to build some models with this data, there are a few things one might notice. Fortunately, the data types for the 31 variables seem to match what we would expect. For example, `age_at_diagnosis` is a continuous variable, so R treats the values as `double` (or `dbl` for short) — you can generally think of `double` values as numerics with decimals, whereas `integer`/`int` values are whole numbers or *counts* (see the `T` variable, which represents survival time in days). On the other hand, variables like `last_follow_up_status` and `histological_type` are represented as "characters" (`chr`), which is what we want for anything we might use to specificy different "categories". Finally, some status indicators such as `survival_5y` ("did the patient survive at least 5 years from diagnosis?") are encoded as `logical`/`lgl` values "TRUE" or "FALSE".
+
+This data has actually been cleaned up ahead of time, which is part of the reason why we don't need to worry about fixing data types here. However, the above examples give you an idea of things to look for when inspecting a new dataset.
+
+You might also notice that none of the variables here are **factors** — we specifically told R not to convert anything into factors when reading in the data. This is OK! It's typically easier to create factors later on as needed, rather than try to change data from factors into a different type.
+
+## Dealing with missing values
+
+Even though the types of our variables look good, there are several columns with multiple values that look like "NA"... `NA` (which stands for “not available”) is a special type of value in R that is often used to indicate “missing data”. Identifing and handling missing data is another important part of any statistical analysis.
+
+While there are lots of more sophisticated approaches to dealing with `NA`s in a dataset, we'll keep things simple for now and remove any variables that include `NA` values. In other words, if any of our clinical measurements or charateristics are unavailable for some samples, we won't consider those variables when building our models.
+
+Before we identify and remove the variables with missing data, a few quick notes on `logical` values in R. We've mentioned that logical data types have some useful properties beyond what we get from "True" or "False" strings. One of these properties is for arithmetic, where `TRUE` is treated as `1` and `FALSE` as `0` for basic mathematical operations.
+
+```{r}
+TRUE + FALSE + TRUE
+```
+
+Why do we care about counting `TRUE` and `FALSE` values? Well, be using another handy function called `is.na()`, which asks "is this value `NA`?"
+
+```{r}
+is.na(c(NA, "foo"))
+```
+
+So, if we use `is.na()` to check all values in a column or vector, we'll get a resulting vector of `TRUE` or `FALSE` values. We can then count these logical values to quickly see how many `NA` or missing values we have in each column. Below, the `colSums()` lets us get these sums for *all* columns in the data frame.
+
+```{r}
+na_counts <- colSums(is.na(activity_clinical_df))
+na_counts
+```
+
+OK — we can see that several variables have more than 0 missing values, and these are the columns we want to remove. To cut these columns, we'll use *another* nice property of logical values!
+
+That is, logical values can be used to **index** (extract certain elements from) a table, list, or vector. If we have two vectors of the same length, you can think of each `TRUE` as saying "keep me" for the corresponding value at the same position, and each `FALSE` saying "drop me". For example, we can use the logical vector `c(TRUE, FALSE, TRUE)` to subset the integer vector `c(1, 2, 3)`. 
+
+```{r}
+x <- c(1, 2, 3)
+x[c(TRUE, FALSE, TRUE)]
+```
+
+No more `2`! Back to our `NA` removal task... In `na_counts`, we have the count of missing values in each column of `activity_clinical_df`. We want to remove columns with counts greater than 0:
+
+```{r}
+na_counts > 0
+```
+
+If the `names()` function gives us the full list of column names in `activity_clinical_df`, then we can use `na_counts > 0` to subset this vector and show only those variables that include missing values.
+
+```{r}
+all_vars <- names(activity_clinical_df)
+na_vars <- all_vars[na_counts > 0]
+na_vars
+```
+
+With one more step, we'll pull out all of the columns that are **not** in the list of names above.
+
+```{r}
+activity_clinical_df[, !all_vars %in% na_vars]
+```
+
+Finally, we'll update `activity_clinical_df` to only include the columns with no missing data.
+
+```{r}
+activity_clinical_df <- activity_clinical_df[, !all_vars %in% na_vars]
+glimpse(activity_clinical_df)
+```
+
+## Checking output variables
+
+Before trying to model a certain response or outcome, it's useful to first understand a bit more about the characteristics of that outcome variable. We ultimately want to predict survival time (`T`) for the patients in our data, which we saw above is a numeric variable. 
+
+While there's nothing too remarkable or unexpected about `T`, we also have some complementary information about patient outcome: `last_follow_up_status`. Let's take a closer look at the values in this field with the `unique()` functions, which returns the *unique* set of values.
+
+```{r}
+unique(activity_clinical_df$last_follow_up_status)
+```
+
+These values are abbreviations for the following statuses:
+
++ `a` = alive
++ `d` = died of disease
++ `d-d.s.` = died of disease
++ `d-o.c.`= died of other causes
+
+In other words, the time for some patients simply represents the number of days between their initial diagnosis and their last follow-up appointment in the study — even if they were alive! For patients who were still living at last follow-up or who died of other causes (could be old age, a car crash, or anything), trying to model "survival time" wouldn't be very informative or tell us much about breast cancer outcome.
+
+These cases, where we don't know exactly when or if patients ultimately died due to breast cancer, are known as "censored" events. There are sophisticated statistical techniques for modeling censored data that allow for a more comprehensive prediction of survival outcome, but they're beyond the scope of this course.
+
+Instead, we'll remove censored samples from the data and focus on predicting survival time for patients who we know died of disease.
+
+```{r}
+activity_clinical_sub_df <- activity_clinical_df[!activity_clinical_df$censored, ]
+nrow(activity_clinical_sub_df)
+```
+
+This unfortunately only leaves us with 439 samples to train our models — but that's still more than a lot of studies!
+
+With our subsetted table, we're ready to move on to the next step.
+
+Just as a check, think of a way to find out how many columns are in the data? Put the answer in the response window.
+
+---
+
+# Plotting data for inspection
+
+It can often be helpful to visualize data distributions with a plot. In this example we will explore two quick ways to visualize data that is continuous or discrete. We will use the age and stage fields in our data for this demonstration. The age data is continuous which we can see by simply plotting the unsorted values in the field and understanding there appears to be no pattern suggesting a discrete distribution of the data.
+
+```{r}
+plot(activity_clinical_sub_df$age_at_diagnosis)
+```
+
+When we plot the stage data however, we clearly see a pattern suggestive of a discrete distribution.
+
+```{r}
+plot(activity_clinical_sub_df$stage)
+```
+
+If we desire to get a more concrete view of how the age data is distributed we can use a combination of the **plot** function with the **density** distribution which will plot the data as a continuous function. This makes the **density** function an ideal way to visualize continuous data from our data frame.
+
+```{r}
+plot(density(activity_clinical_sub_df$age_at_diagnosis))
+```
+
+Now if we wish to get a more global view of the stage data, we want to take a different approach. Because the stage data is discrete, we want to utilize a plot that illustrates the discrete nature of the data. We can do this by combining the **table** and **barplot** commands. The **table** command enumerates the occurrences of each value in the stage data. The **barplot** function displays a barplot of the enumeration from the **table** command. Let's walk through an example to make this clear.
+
+```{r}
+barplot(table(activity_clinical_sub_df$stage))
+```
+
+Investigate the table function the code above. What does the table function appear to actually do? 
+
+As we can see most of the data is composed of samples of stage 0. Knowing the demographics of our data is oftentimes crucial for any analysis of the data. Combining summary statistics with visualizations like those shown above represents a crucial first step in any analysis. 
+
+Try to generate a new bar plot for HER2 expression status (`Her2.Expr`) with `table()` by filling in the missing code here:
+
+```{r}
+barplot(_____(activity_clinical_sub_df$_____))
+```
+
+---
+
+# Modeling survival
+
+## Introduction to modeling
+
+After we have read in and inspected our data, we typically want to leverage it for some task. One task could be to build a predictive model from the data. These models can range from simple to complicated — and a model's use is very much dictated by the nature, quantity, and complexity of the data and task at hand. In general it is good practice to try and use the simplest model that accomplishes the task optimally. Among the workhorses of such models is the **linear regression**. 
+
+Linear regression models take the canonical form of `y = mx + b` — when you perform linear regression, you're literally finding the **line** that best fits the data. In this classic model, the dependent variable `y` is predicted by a single independent variable `x` which is multiplied by a *learned* slope coefficent `m`. The model intercepts the y-axis at point `b`. Now, this model can be expanded to have multiple independent variables with multiple learned `m` coefficents (multivariate linear regression), but for our purposes today we will simply try and model, from the data, the survival of a patient at 5 years (dependent variable) as a function of their age of diagnosis (independent variable).
+
+To do this we will use R's **`lm()`** command which is the on-board **linear model** function avaliable in R. Let's start with an example and expand from there.
+
+```{r}
+lm(formula = activity_clinical_sub_df$T ~ activity_clinical_sub_df$age_at_diagnosis)
+```
+
+In this example the formula (y = mx + b) is a hardcoded word for the function which specifies the function to be used. The dependent variable is `activity_clinical_df$T` (survival time) and it is only the left side of the `~` which serves as the equality. On the right side of the `~` is the independent variables which in our case is just `activity_clinical_df$age_at_diagnosis`. The coefficient for the coefficent and the y-intercept are both learned or *trained* by the model through a error minimization procedure (method of least squares is one such method). We can make the command simpler by adding a data parameter which simply tells the linear model which object in the R enviroment represents the data. We'll also save our model to a new variable, so we can access it more easily.
+
+```{r}
+age_model <- lm(formula = T ~ age_at_diagnosis, data = activity_clinical_sub_df)
+age_model
+```
+
+## Inspecting and evaluating models
+
+What does this output mean? Recall that the `lm()` function is trying to learn two parameters for a *line* that explains the trend of survival time (`T`) in relation to `age_at_diagnosis`: the intercept, `b`, and slope, `m`, such that we end up with the equation `T ~ m*age_at_diagnosis + b`. We can actually view this trend (and the fitted line) with another plot:
+
+```{r}
+plot(activity_clinical_sub_df$age_at_diagnosis, activity_clinical_sub_df$T)
+abline(1201.37, 13.62)
+```
+
+The estimated slope or **coefficient** for `age_at_diagnosis` in the model, `13.62` predicts that *for every 1-year increase in diagnosis age, survival time will increase by about 14 days. Can you think of why survival time might tend to be higher for patients who were diagnosed at increasingly older ages?
+
+The trend of survival time relative to diagnosis age isn't especially strong, but let's see if we can evaluate our model in a more systematic way. If we want to get an assessment for how good our model is there are a few things we can do. The first and simpliest is to simply use the **`summary()`** command again.
+
+```{r}
+summary(age_model)
+```
+
+This command will give a lot of informative output, but a quick way to assess the fit of our model is to look at the Adjusted R-squared value. This value represents the amount of variance in the data that is captured by our model. Just looking at age accounts for 1.1% of the variance in our model, which is pretty small. When we inspect the p-value associated with age as a covariate we see that it is highly significant... but this really only tells us that the relationship between diagnosis age and time probably isn't zero (even if it's small).
+
+## Adding more information to our model
+
+While diagnosis age could be associated with breast cancer outcome for a number of reasons, there are other clinical variables that might be more predictive of survival time. For example, let's try to incorporate what we know about the *severity* of tumors based on the `stage` variable. We'll include this additional term or **covariate** in our model equation, which is our first example of "multivariate" modeling.
+
+```{r}
+age_stage_model <- lm(T ~ age_at_diagnosis + stage, data = activity_clinical_sub_df)
+summary(age_stage_model)
+```
+
+Some takeaways from this model: the estimated coefficient for `stage == 4` is much larger in magnitude than `age_at_diganosis`. In other words, being diagnosed with a stage 4 tumor is predicted to be associated with a decrease in survival time of over 1129 days (over 3 years)! The p-value estimated for this coefficient is also much smaller, indicating more confidence that the effect is non-zero. Finally, our adjusted R-squared value has increased to ~0.05, indicating that our model explains about 5% of the variance in the data. This still isn't great, but it's a 500% improvement from looking at the overall age trend!
+
+Instead of a scatterplot, we can use a **boxplot** to view the difference in survival times between patients based on stage.
+
+```{r}
+boxplot(T ~ stage, data = activity_clinical_df)
+```
+
+---
+
+# mini-DREAM Challenge
+
+Now that you've built a model to predict survival time based on diagnosis age group, we can apply it to the samples in a new dataset and submit our predictions to the **mini-DREAM Challenge**.
+
+## Predicting survival time
+
+Again, for the mini-DREAM challenge submissions, we'll be using a separate, special dataset where *we don't know* the survival time (we do know, but it will be hidden in the activities). We've made another "RData" file with this dataset to make it easier to load.
+
+```{r}
+load("/home/shared/data/metabric_split/challenge_data.RData", verbose = TRUE)
+```
+
+Because we only want to predict survival time for those patients who ultimately die of cancer, let's subset the challenge data as well to removed censored samples.
+
+```{r}
+challenge_clinical_sub_df <- challenge_clinical_df[!challenge_clinical_df$censored, ]
+```
+
+Now, we can use the `predict.lm()` function, which will use the coefficient and estimate we learned from the `activity_clinical_df` data above, apply this information to the `age_at_diagnosis` and `stage` variables in the challenge data frame, and predict survival time for this cohort of 162 patients.
+
+```{r}
+prediction <- data.frame(METABRIC_ID = challenge_clinical_sub_df$METABRIC_ID, 
+                         T = predict.lm(age_stage_model, 
+                                        newdata = challenge_clinical_sub_df))
+prediction
+```
+
+## Submitting the prediction
+
+You're now ready to submit the prediction. Just run the chunk below, a file with your prediction will be uploaded to Synapse and submitted to the challenge. You'll be able to see the results of your prediction on the mini-DREAM scoreboards, with the submission ID that gets printed below.
+
+```{r}
+library(synapseClient)
+synapseLogin(rememberMe = TRUE)
+submission_filename <- paste(Sys.getenv("USER"), "activity-2.txt", sep = "_")
+write.csv(prediction, submission_filename)
+activity2_submission <- synStore(File(path = submission_filename, parentId = "syn10088799"))
+submission <- submit(evaluation = "9604686", entity = activity2_submission)
+print(submission[[1]]$id)
+```
+
+---
+
+# Wrapping up
+
+Congrats — you’ve reached the end of **Module 2**! You can now return to the **mini-DREAM Challenge** site on Synapse.
