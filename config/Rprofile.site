@@ -1,0 +1,35 @@
+##						Emacs please make this -*- R -*-
+## empty Rprofile.site for R on Debian
+##
+## Copyright (C) 2008 Dirk Eddelbuettel and GPL'ed
+##
+## see help(Startup) for documentation on ~/.Rprofile and Rprofile.site
+##
+## from /etc/R/Rprofile.site
+
+## Example of .Rprofile
+options(max.print=100) 
+options(scipen=10) 
+options(menu.graphics=FALSE)
+options(prompt="> ")
+options(continue="... ")
+# options(width = 80)
+ 
+.First <- function(){
+  if(interactive()){
+    library(utils)
+    library(glue)
+    timestamp(,prefix=paste("##------ [",getwd(),"] ",sep=""))
+    cat(sprintf("\n   Welcome to R, %s!\n\n", Sys.getenv("USER")))
+    msg <- glue("To get started, click the 'Project' button at the top right 
+                 corner of the screen (next to the blue box), and select the 
+                 project name that matches the module for the current activity
+                 (for example, 'module1' for Module 1). Next, open the R 
+                 Notebook file to you're right according to the instructions
+                 on the Synapse page for the activity (these files will end
+                 in '.Rmd').\n\n")
+    message(msg)
+  }
+  #file.edit("~/modules/demo/nbs/demo.Rmd")
+}
+.Last <- function()  cat("\n   Goodbye!\n\n")
