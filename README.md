@@ -7,8 +7,13 @@ Resources for setting up and managing an RStudio environment for interactive min
 3. Install Docker-CE on Ubuntu https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-docker-ce-1
 4. To allow for user hierarchy creation on login, after executing `docker-compose up --build` change the /home volume permissions to `chmod 777 /home`
 
+#### Useful-commands and mics. 
+`rstudio-server --help` ex. `rstudio-server suspend-all` will remove the message: "ERROR session hadabend" from an R session console after each service 'reboot'.
+
 #### Useful-links 
 - https://hub.docker.com/u/rocker/
+
+
 
 
 
