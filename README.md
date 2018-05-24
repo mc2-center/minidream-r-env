@@ -10,6 +10,18 @@ Resources for setting up and managing an RStudio environment for interactive min
 6. To allow for user hierarchy creation on login, after executing `docker-compose up --build -d` change the minidream-r-env/home volume permissions to `chmod 777 minidream-r-env/home`
 7. Log into Rstudio www.replacewithec2address.com:8787
 
+#### Editting the Rstudio instance
+Example:
+1. Create new csv file: example.csv
+`temp,2222`
+2. Get the container id: `docker ps`
+
+3. docker cp example.csv containerId:/example.csv
+
+4. docker-compose exec rstudio /root/util/add_users.sh /example.csv
+
+5. You should be able to log in as temp now.
+
 #### Useful-commands and mics. 
 `rstudio-server --help` ex. `rstudio-server suspend-all` will remove the message: "ERROR session hadabend" from an R session console after each service 'reboot'.
 
