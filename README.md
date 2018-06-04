@@ -7,7 +7,7 @@ Resources for setting up and managing an RStudio environment for interactive min
 3. Install Docker-CE on Ubuntu https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository
 4. Allow for non-root user to manage docker https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user
 5. Install docker-compose on Ubuntu https://docs.docker.com/compose/install/#install-compose.  (Do not do `apt-get install docker-compose`)
-6. To allow for user hierarchy creation on login, after executing `docker-compose up --build -d` change the minidream-r-env/home volume permissions to `chmod 777 minidream-r-env/home`
+6. To allow for user hierarchy creation on login, after executing `docker-compose up --build -d` change the `/home` volume permissions to `chmod 777 /home`
 7. Log into Rstudio www.replacewithec2address.com:8787
 
 #### Editting the Rstudio instance
