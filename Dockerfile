@@ -9,7 +9,7 @@ RUN groupadd student
 
 RUN bash /root/util/add_users.sh /root/util/users.csv
 
-RUN mkdir /root/shared
-RUN cp /root/util/users.csv /root/shared
-RUN chgrp student /root/shared
-RUN chmod g+r  /root/shared
+RUN mkdir /shared
+RUN cp /root/util/users.csv /shared
+RUN chgrp student /shared
+RUN chmod g+r  /shared
