@@ -11,5 +11,8 @@ RUN bash /root/util/add_users.sh /root/util/users.csv
 
 RUN mkdir /shared
 RUN cp /root/util/users.csv /shared
-RUN chgrp student /shared
-RUN chmod g+r  /shared
+RUN chgrp rstudio-admin /shared
+RUN chmod g+rw  /shared
+
+
+#Remove everyone else read only from ubuntu
