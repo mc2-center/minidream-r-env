@@ -15,4 +15,4 @@ RUN cp /root/util/users.csv /shared
 RUN chgrp rstudio-admin /shared
 RUN chmod g+rw  /shared
 
-#MUST CHMOD 700 the ubuntu folder after docker compose is running
+#MUST CHMOD 770 the ubuntu folder after docker compose is running

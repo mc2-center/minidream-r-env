@@ -7,20 +7,23 @@ Resources for setting up and managing an RStudio environment for interactive min
 3. Install Docker-CE on Ubuntu https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository
 4. Allow for non-root user to manage docker https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user
 5. Install docker-compose on Ubuntu https://docs.docker.com/compose/install/#install-compose.  (Do not do `apt-get install docker-compose`)
-6. To allow for user hierarchy creation on login, after executing `docker-compose up --build -d` change the `/home` volume permissions to `chmod 777 /home`
+6. To allow for user hierarchy creation on login, after executing `docker-compose up --build -d` change the `/home` volume permissions to `chmod 750 /home`
 7. Log into Rstudio www.replacewithec2address.com:8787
 
 #### Editting the Rstudio instance
-Example:
+Example: Adding a new student
 1. Create new csv file: example.csv
-`temp,2222`
+`student,2222,rstudio-user;student`
 2. Get the container id: `docker ps`
 
-3. docker cp example.csv containerId:/example.csv
+3. `docker cp example.csv containerId:/example.csv`
 
-4. docker-compose exec rstudio /root/util/add_users.sh /example.csv
+4. `docker-compose exec rstudio /root/util/add_users.sh /example.csv`
 
-5. You should be able to log in as temp now.
+5. You should be able to log in as student now.
+
+Or:
+`docker-compose exec rstudio /root/util/add_students.sh student`
 
 #### Useful-commands and mics. 
 `rstudio-server --help` ex. `rstudio-server suspend-all` will remove the message: "ERROR session hadabend" from an R session console after each service 'reboot'.

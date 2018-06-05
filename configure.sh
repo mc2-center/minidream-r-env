@@ -9,4 +9,4 @@
 # docker-compose exec rstudio /root/util/add_students.sh newStudent
 
 docker-compose up --build -d
-docker-compose exec rstudio chmod 700 /home/ubuntu
+#docker-compose exec rstudio chmod 750 /home/ubuntu
