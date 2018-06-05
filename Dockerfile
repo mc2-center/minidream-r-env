@@ -11,8 +11,8 @@ RUN bash /root/util/add_users.sh /root/util/users.csv
 
 RUN mkdir /shared
 RUN cp /root/util/users.csv /shared
+#This allows for only the admins to read and write to shared
 RUN chgrp rstudio-admin /shared
 RUN chmod g+rw  /shared
 
-
-#Remove everyone else read only from ubuntu
+#MUST CHMOD 700 the ubuntu folder after docker compose is running
