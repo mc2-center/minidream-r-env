@@ -7,5 +7,5 @@ while read line; do
   b=($(echo "${a[2]}" | tr ';' '\n'))
   # add the user
   useradd -m -p $(openssl passwd -crypt "${a[1]}") -s /bin/bash "${a[0]}"
-  usermod -a -G "${b[0]},${b[1]}"
+  usermod -a -G "${b[0]},${b[1]}" "${a[0]}"
 done < "$1"
