@@ -1,5 +1,6 @@
 import sys
 import synapseclient
+import pandas as pd
 
 
 def get_roster_df(syn, table_id):
@@ -17,8 +18,15 @@ def role2group(role):
 
 
 def format_user_df(roster_df):
-    user_df = roster_df[['RStudioUserName', 'Role']]
-    user_df['Role'] = user_df['Role'].map(role2group)
+    roster_df['password'] = 'csbcpson'
+    user_df = pd.concat(
+        [
+            roster_df['RStudioUserName'],
+            roster_df['password'],
+            roster_df['Role'].map(role2group)
+        ],
+        axis=1
+    )
     return user_df
 
 
