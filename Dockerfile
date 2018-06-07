@@ -6,13 +6,13 @@ COPY util /root/util/
 
 RUN groupadd rstudio-admin
 RUN groupadd rstudio-user
-RUN groupadd student
 
 RUN bash /root/util/add_users.sh /root/util/users.csv
 
 RUN mkdir /shared
-#This allows for only the admins to read and write to shared
+
+# This allows for only the admins to read and write to shared
 RUN chgrp rstudio-admin /shared
 RUN chmod g+rw  /shared
 
-#MUST CHMOD 750 the ubuntu folder after docker compose is running
+# MUST CHMOD 750 the ubuntu folder after docker compose is running
