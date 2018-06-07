@@ -1,6 +1,7 @@
 FROM rocker/rstudio:3.4.4
 
 COPY config/Rprofile.site /usr/local/lib/R/etc/
+COPY config/rserver.conf /etc/rstudio/rserver.conf
 COPY util /root/util/
 
 RUN groupadd rstudio-admin
