@@ -32,6 +32,6 @@ for user in $GROUP_MEMBERS; do
             -type d \
             -name ".Rproj.user" \
             | xargs -n 1 -I {} sudo rm -rf {}
-        sudo rm "${user_modules}/${MODULE_NAME}/*.nb.html"
+        sudo rm ${user_modules}/${MODULE_NAME}/*.nb.html
     fi
 done
