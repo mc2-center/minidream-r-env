@@ -14,8 +14,8 @@ Resources for setting up and managing an RStudio environment for interactive min
   Creating minidream-r-env_rstudio_1 ... done
 ```
 
-6. To allow for user hierarchy creation on login, after launching the server with `docker-compose`, change the `/home/ubuntu` volume permissions to `chmod 750 /home/ubuntu`.
-7. Log into Rstudio www.replacewithec2address.com:8787
+8. To allow for user hierarchy creation on login, after launching the server with `docker-compose`, change the `/home/ubuntu` volume permissions to `chmod 750 /home/ubuntu`.
+9. Log into Rstudio www.replacewithec2address.com:8787
 
 #### Editting the Rstudio instance
 Example: Adding a new student
