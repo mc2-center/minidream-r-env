@@ -7,15 +7,21 @@ Resources for setting up and managing an RStudio environment for interactive min
 3. Install Docker-CE on Ubuntu: https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository
 4. Allow for non-root user to manage docker: https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user
 5. Install docker-compose on Ubuntu https://docs.docker.com/compose/install/#install-compose.  (Do not do `apt-get install docker-compose`)
-6. Clone this repository onto the EC2 instance and `cd minidream-r-env`.
-7. Run the command `docker-compose up --build -d` to launch the RStudio server. If it worked, you should see a message that looks like this:
+6. Clone the repository with the modules you'll be using for your mini-DREAM course — for example:
+
+```shell
+git clone https://github.com/Sage-Bionetworks/minidream-challenge-2018
+```
+
+7. Clone **this** repository onto the EC2 instance and `cd minidream-r-env`.
+8. Run the command `docker-compose up --build -d` to launch the RStudio server. If it worked, you should see a message that looks like this:
 
 ```shell
   Creating minidream-r-env_rstudio_1 ... done
 ```
 
-8. To allow for user hierarchy creation on login, after launching the server with `docker-compose`, change the `/home/ubuntu` volume permissions to `chmod 750 /home/ubuntu`.
-9. Log into Rstudio www.replacewithec2address.com:8787
+9. To allow for user hierarchy creation on login, after launching the server with `docker-compose`, change the `/home/ubuntu` volume permissions to `chmod 750 /home/ubuntu`.
+10. Log into Rstudio www.replacewithec2address.com:8787
 
 #### Editting the Rstudio instance
 Example: Adding a new student
