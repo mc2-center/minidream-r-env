@@ -1,5 +1,7 @@
 FROM rocker/rstudio:3.4.4
 
+RUN apt-get update && apt-get -y install rsync
+
 COPY config/Rprofile.site /usr/local/lib/R/etc/
 COPY config/rserver.conf /etc/rstudio/rserver.conf
 COPY util /root/util/
