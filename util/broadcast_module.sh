@@ -5,7 +5,7 @@
 # $2 = group name
 #
 # Usage:
-# broadcast_module.sh /home/shared/modules/demo
+# broadcast_module.sh /home/shared/modules/module0 rstudio-user
 
 SHARED_MODULE=$(realpath $1)
 MODULE_NAME=$(basename $SHARED_MODULE)
@@ -32,6 +32,6 @@ for user in $GROUP_MEMBERS; do
             -type d \
             -name ".Rproj.user" \
             | xargs -n 1 -I {} sudo rm -rf {}
-        sudo rm "${user_modules}/${MODULE_NAME}/${MODULE_NAME}.nb.html"
+        sudo rm "${user_modules}/${MODULE_NAME}/*.nb.html"
     fi
 done
