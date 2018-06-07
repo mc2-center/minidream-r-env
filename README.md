@@ -19,8 +19,7 @@ git clone https://github.com/Sage-Bionetworks/minidream-challenge-2018
 ```shell
   Creating minidream-r-env_rstudio_1 ... done
 ```
-
-9. To allow for user hierarchy creation on login, after launching the server with `docker-compose`, change the `/home/ubuntu` volume permissions to `chmod 750 /home/ubuntu`.
+9. To allow for user hierarchy creation on login, after launching the server with `docker-compose`, change the `/home` volume permissions to `chmod 777 /home`. If this isn't done, you will get an error upon logging into rstudio: `Unable to connect to service`
 10. Log into Rstudio www.replacewithec2address.com:8787
 
 #### Editting the Rstudio instance
