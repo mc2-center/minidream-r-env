@@ -8,10 +8,14 @@ while read line; do
   b=($(echo "${a[2]}" | tr ';' '\n'))
   getent passwd "${a[0]}" > /dev/null
   if [ $? -eq 0 ]; then
-    # add the user
-    useradd -m -p $(openssl passwd -crypt "${a[1]}") -s /bin/bash "${a[0]}"
-    usermod -a -G $(join_by , "${b[@]}") "${a[0]}"
-  else
     echo "User ${a[0]} already exists; skipping."
+  else
+    # add the user
+    user="${a[0]}"
+    userpass="${a[0]}"
+    groupstr=$(join_by , "${b[@]}")
+    echo "Adding user $user to groups $groupstr"
+    useradd -m -p $(openssl passwd -crypt $userpass) -s /bin/bash $user
+    usermod -a -G $groupstr $user
   fi
 done < "$1"
