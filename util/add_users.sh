@@ -12,7 +12,7 @@ while read line; do
   else
     # add the user
     user="${a[0]}"
-    userpass="${a[0]}"
+    userpass="${a[1]}"
     groupstr=$(join_by , "${b[@]}")
     echo "Adding user $user to groups $groupstr"
     useradd -m -p $(openssl passwd -crypt $userpass) -s /bin/bash $user
