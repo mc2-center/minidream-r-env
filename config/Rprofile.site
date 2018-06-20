@@ -32,13 +32,8 @@ options(continue="... ")
     cat(sprintf("\n   Welcome to R, %s!\n\n", Sys.getenv("USER")))
 
     msg <- stringr::str_glue("
-    To get started, click the 'Project' button at the top right corner of
-    the screen (next to the blue box), and select the project called
-    'minidream-challenge-2018' — this will make sure we all start from a
-    common point.
-
-    Next, click to open the folder to your right that says 'modules',
-    then find the folder for today's module (e.g., 'Module 0'). Double click
+    To get started, click on the folder to your right that says 'modules',
+    then find the folder for today's module (e.g., 'Module 0'). Click
     to open the R Notebook file that has the word '_activity' in the name
     and ends with in '.Rmd').\n\n")
     message(msg)
