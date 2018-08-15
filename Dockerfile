@@ -1,10 +1,10 @@
 FROM rocker/rstudio:3.4.4
 
-RUN apt-get update && apt-get -y install rsync, libffi-dev, zlib1g-dev, libpng-dev, libjpeg-dev
+RUN apt-get update && apt-get -y install rsync libffi-dev zlib1g-dev libpng-dev libjpeg-dev libcurl4-openssl-dev  libssl-dev libxml2-dev libcairo2-dev libxt-dev
 RUN Rscript -e "install.packages(c('tidyverse', 'tsne', 'imager'))"
 RUN Rscript -e "install.packages('synapser', repos=c('https://sage-bionetworks.github.io/ran', 'http://cran.fhcrc.org'))"
-RUN Rscript -e "install.packages(c('caTools', 'bitops'))"
-RUN Rscript -e "source('https://bioconductor.org/biocLite.R'); biocLite(c('clusterProfiler', 'org.Hs.eg.db', 'DOSE')"
+RUN Rscript -e "install.packages(c('caTools', 'bitops','survival'))"
+RUN Rscript -e "source('https://bioconductor.org/biocLite.R'); biocLite(c('clusterProfiler', 'org.Hs.eg.db', 'DOSE', 'pathview'))"
 
 
 COPY config/Rprofile.site /usr/local/lib/R/etc/
