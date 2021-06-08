@@ -1,9 +1,16 @@
 version: '3'
 services:
-
-  rstudio:
+  reverse_proxy:
+    container_name: proxy
     build:
-      context: .
+      context: ./proxy
+      dockerfile: Dockerfile
+    ports:
+      - 443:443
+  rstudio:
+    container_name: rstudio
+    build:
+      context: ./rstudio
       dockerfile: Dockerfile
     volumes:
       - /home:/home
@@ -11,4 +18,3 @@ services:
       - /home/${USER}/
     ports:
       - "8787:8787"
-
