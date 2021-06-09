@@ -1,21 +1,22 @@
 FROM ubuntu:18.04
 
-RUN apt-get update && apt-get install -y \
-    apache2 \
-    ssl-cert \
-    libapache2-mod-python \
-    zlib1g-dev \
-    libclang-dev \
-    libssl-dev \
-    libffi-dev \
-    libcurl4-openssl-dev \
-    libapparmor1 \
-    libssl1.0.0 \
-    libxml2-dev
+RUN apt-get update \
+    && apt-get -y install \
+        apache2 \
+        libapparmor1 \
+        libclang-dev \
+        libcurl4-openssl-dev \
+        libffi-dev \
+        libssl-dev \
+        libssl1.0.0 \
+        libxml2-dev \
+        ssl-cert \
+        zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY config/proxy.conf /etc/apache2/sites-available/proxy.conf
 
-RUN a2enmod ssl proxy proxy_http rewrite python headers
+RUN a2enmod ssl proxy proxy_http rewrite headers
 
 RUN a2ensite proxy
 
