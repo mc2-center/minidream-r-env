@@ -25,7 +25,7 @@ for user in $GROUP_MEMBERS; do
         user_home="/home/${user}"
         sudo rm -rf ${user_home}/.rstudio
         sudo cp -r $SETTINGS $user_home
-        sudo chown -R ${user}.rstudio-admin $user_home
+        sudo chown -R "${user}":rstudio-admin $user_home
         sudo find "$user_home/.rstudio" \
             -mindepth 1 -maxdepth 1 \
             -name "session-persistent-state" \
