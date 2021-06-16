@@ -1,34 +1,34 @@
 #!/usr/bin/env bash
 # Copy RStudio user settings to a new user from an example user
 #
-# $1 = example RStudio user settings directory
-# $2 = group name
+# $1 = Source user
+# $2 = Target group name
 #
 # Usage:
-# broadcast_settings.sh /home/jeddy/.rstudio
+# broadcast_settings.sh bgrande rstudio-user
 
-SETTINGS=$1
+BASE_USER=$1
 GROUP=$2
 
 echo "Terminating active R sessions..."
 #sudo pkill rsession
 sudo rstudio-server kill-all
 
-BASE_USER=$(basename $(dirname $SETTINGS))
-echo "Original user: ${BASE_USER}"
+# BASE_USER=$(basename $(dirname $SETTINGS))
+echo "Source user: ${BASE_USER}"
+
+SETTINGS="/home/${BASE_USER}/.config/rstudio/rstudio-prefs.json"
 
 GROUP_MEMBERS=$(getent group $GROUP)
 GROUP_MEMBERS=$(echo ${GROUP_MEMBERS##*:} | tr "," "\n")
+
 for user in $GROUP_MEMBERS; do
-    if [[ "$user" != "jeddy" ]]; then
+    if [[ "$user" != "${BASE_USER}" ]]; then
         echo "Copying '${SETTINGS}' to user: ${user}"
-        user_home="/home/${user}"
-        sudo rm -rf ${user_home}/.rstudio
-        sudo cp -r $SETTINGS $user_home
-        sudo chown -R "${user}":rstudio-admin $user_home
-        sudo find "$user_home/.rstudio" \
-            -mindepth 1 -maxdepth 1 \
-            -name "session-persistent-state" \
-            | sudo xargs -n 1 -I{} rm {}
+        user_settings="/home/${user}/.config/rstudio/rstudio-prefs.json"
+        mkdir -p $(dirname "${user_settings}")
+        sudo rm -f "${user_settings}"
+        sudo cp "${SETTINGS}" "${user_settings}"
+        sudo chown -R "${user}":rstudio-admin "/home/${user}"
     fi
 done
