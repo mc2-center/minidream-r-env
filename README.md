@@ -143,7 +143,7 @@ Update the following scripts:
         'id':<need to be updated>,
         'scoring_func':score,
     }
-]
+      ]
       ```
 3. `R/submission_helpers`
    - update `syn id` of modules. 
@@ -182,7 +182,7 @@ Update the following scripts:
   python3 $script_dir/challenge.py
   ```
 
-5. Check out intro of cron job[here](https://help.ubuntu.com/community/CronHowto#Starting_to_Use_Cron)
+5. Check out intro of cron job [here](https://help.ubuntu.com/community/CronHowto#Starting_to_Use_Cron)
 
 6. Run the following to set up cron job for running every day, every minute: 
 ```
