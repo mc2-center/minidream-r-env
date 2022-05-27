@@ -41,10 +41,12 @@ git clone --branch bgrande/minidream-2021 https://github.com/Sage-Bionetworks/mi
 ```shell
   Creating minidream-r-env_rstudio_1 ... done
 ```
+
 *Note* `-d` starts the containers in the background and leaves them running.
 
 7. To allow for user hierarchy creation on login, after launching the server with `docker-compose`, change the `/home` volume permissions to `chmod 777 /home`. If this isn't done, you will get an error upon logging into rstudio: `Unable to connect to service`
 8. Check out Rstudio by using the link [here](http://minidream.synapse.org/)
+
 *Note*: To check if containers are running, use command `docker container ls -a` This should show you the container ID of `rstudio` and `proxy`. 
 
 
@@ -52,6 +54,7 @@ git clone --branch bgrande/minidream-2021 https://github.com/Sage-Bionetworks/mi
 Example: Adding a new student
 1. Create new csv file: example.csv
 `catherine,2222,rstudio-user;`
+
 *Note* for admin, you could try something like: 
 `linglp,<Your default password>,rstudio-user;rstudio-admin`
 
@@ -65,6 +68,7 @@ Example: Adding a new student
 
 Or you could try to add students by using `add_students.sh`:
 `docker-compose exec rstudio /root/util/add_students.sh student`
+
 *Note*: check `add_students.sh` for default password of the added students
 
 ### Useful-commands and mics. 
