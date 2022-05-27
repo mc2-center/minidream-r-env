@@ -163,13 +163,12 @@ Update the following scripts:
     "3" = "syn25653327",
     "4" = "syn25653347",
     "5" = "syn25653365",
-    "7" = "syn25653405"
-  )
+    "7" = "syn25653405")
    ```
-
    - update evaluation ID:
+   
   ```
-      submission <- synSubmit(evaluation = "9614774", 
+      submission <- synSubmit(evaluation = "<need to be updated>", 
                             entity = activity_submission)
   ```
 
