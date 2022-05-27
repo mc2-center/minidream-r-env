@@ -72,7 +72,7 @@ Or you could try to add students by using `add_students.sh`:
 
 ### Useful-links 
 - https://hub.docker.com/u/rocker/
-- [Bruno's video](https://www.synapse.org/#!Synapse:syn29616137/wiki/617456)showing how to access R studio environment
+- [Bruno's video](https://www.synapse.org/#!Synapse:syn29616137/wiki/617456) showing how to access R studio environment
 
 *Note*: You should not commit `admin.csv` or `student.csv` since they contain password
 
