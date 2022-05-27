@@ -67,15 +67,16 @@ Or you could try to add students by using `add_students.sh`:
 `docker-compose exec rstudio /root/util/add_students.sh student`
 *Note*: check `add_students.sh` for default password of the added students
 
-#### Useful-commands and mics. 
+### Useful-commands and mics. 
 `rstudio-server --help` ex. `rstudio-server suspend-all` will remove the message: "ERROR session hadabend" from an R session console after each service 'reboot'.
 
-#### Useful-links 
+### Useful-links 
 - https://hub.docker.com/u/rocker/
 - [Bruno's video](https://www.synapse.org/#!Synapse:syn29616137/wiki/617456)showing how to access R studio environment
 
+*Note*: You should not commit `admin.csv` or `student.csv` since they contain password
 
-#### Relevant tests
+### Relevant tests
 - Logging in as a student
 - Logging in as a admin
 - Changing password in R studio environment after you log in by following the steps below: 
@@ -202,7 +203,7 @@ If you don't have any cron jobs running, this command would prompt you to set up
 - Update an module and re-broadcast it
 - Run cron job and see leaderboard gets reflected. To see the leaderboard, click on `wiki tools` -> Edit project Wiki -> uncomment the line related to `leaderboard` on [2022 CSBC PS-ON mini-DREAM Challenge](https://www.synapse.org/#!Synapse:syn29616137/wiki/617459)
 
-# Other resources
+## Other resources
  - [Milen's repo and documentation](https://github.com/milen-sage/minidream-r-env)
  - [Bruno's repo and documentation](https://github.com/Sage-Bionetworks/minidream-r-env/tree/bgrande/minidream-2021)
 
