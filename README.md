@@ -91,18 +91,21 @@ Or you could try to add students by using `add_students.sh`:
 ### Explanation of "shared" folder in rstudio container
 1. Try interacting with R studio container by using the following command: 
 `docker exec -it rstudio bin/bash`
-2. You could see the `shared` directory there. Then, you could `cd shared` and find out that the content within `shared` folder is the same as `minidream-challenge` repo. If you create a new test file by using `touch test`, you would notice that this `test` file gets sync to `minidream-challenge` repo as well. This is because in our `docker-compose.yml`, we have the following: 
+2. You should be able to find `shared` folder by doing `ls`. You should also be able to find `broadcast_module.sh` in `root/utils` folder and `module0` in `shared/modules` folder
+3. Then, you could `cd shared` and find out that the content within `shared` folder is the same as `minidream-challenge` repo. If you create a new test file by using `touch test`, you would notice that this `test` file gets sync to `minidream-challenge` repo as well. This is because in our `docker-compose.yml`, we have the following: 
 ```
     volumes:
       - ../minidream-challenge:/shared
 ```
+4. Exit the container interactive environment by doing: `exit`
 
 ## Broadcasting module
-1. Try broadcast module 0 to rstudio-user: 
+1. `cd minidream-r-env`
+2. Try broadcast module 0 to rstudio-user: 
 ```
-docker compose exec rstudio root/utils/broadcast_module.sh /shared/modules/module0 rstudio-user
+docker compose exec rstudio root/utils/broadcast_module.sh shared/modules/module0 rstudio-user
 ```
-2. For updating module content, try to copy new module content to `./home/shared/modules/<module_name>` (i.e. via scp) and then re-broadcast the content by repeating step 1 
+3. For updating module content, try to interact with docker container by doing: `docker exec -it rstudio bin/bash`, and then copy new module content to `/shared/modules/<module_name>` (i.e. via scp). After making all the changes, try re-broadcast the content by repeating step 1 and 2. 
 
 ### Relevant tests
 - Broadcast module 0 to rstudio-users
