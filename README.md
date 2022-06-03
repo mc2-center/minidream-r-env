@@ -111,6 +111,20 @@ docker compose exec rstudio root/utils/broadcast_module.sh shared/modules/module
 - Broadcast module 0 to rstudio-users
 - Update module content 
 
+## Adding symbolic link to docker container 
+Open `rstudio-overview_activity.rmd` of folder `module 0` in R studio environment. We could see the following code in the beginning: 
+```
+data_dir <- "/home/shared/data"
+scripts_dir <- "/home/shared/R"
+source(file.path(scripts_dir, "submission_helpers.R"))
+```
+
+To make sure that all file paths are valid, we could create a symbolic link in R studio container by doing the following: 
+- `docker compose exec -it -w /root/utils rstudio ls`
+- `ln -s /shared /home/shared`
+
+*Note*: `/shared` is the source folder, and `/home/shared` is the symbolic link. 
+
 ## Module submission and cron job
 1. Install mini conda on EC2 instance 
   - Make a folder for `miniconda 3`: `mkdir miniconda3`
@@ -143,6 +157,8 @@ Update the following scripts:
   - Update CHALLENGE_NAME
   - Update ADMIN_USER_IDS. This should be your found on your profile page. (Example, for Lingling, this is the [profile page](https://www.synapse.org/#!Profile:3443707/profile))
   - Update evaluation queues
+      - for Year 2022, you could find the evaluation queue number [here](https://www.synapse.org/#!Synapse:syn29616137/challenge/)
+
       - see the line here: 
       ```
       evaluation_queues = [
