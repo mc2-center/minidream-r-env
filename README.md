@@ -64,7 +64,8 @@ Example: Adding a new student
 
 *Note*: Now, if you do: `docker compose exec -it rstudio ls`, you should be able to see `example.csv`
 
-4. `docker compose exec rstudio /root/util/add_users.sh example.csv`
+4. use `add_users` script to add users in `example.csv`: 
+`docker compose exec rstudio /root/util/add_users.sh example.csv`
 
 5. You should be able to log in as `catherine` now by using password `2222`
 
