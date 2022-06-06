@@ -60,9 +60,11 @@ Example: Adding a new student
 
 2. Get the container id of `rstudio` by using: `docker ps`
 
-3. `docker cp example.csv containerId:/example.csv`
+3. First make sure that you are in the right directory by doing: `cd /minidream-r-env/rstudio/utils`. Then, copy your local file to docker container by doing: `docker cp example.csv containerId:example.csv`
 
-4. `docker compose exec rstudio /root/util/add_users.sh /example.csv`
+*Note*: Now, if you do: `docker compose exec -it rstudio ls`, you should be able to see `example.csv`
+
+4. `docker compose exec rstudio /root/util/add_users.sh example.csv`
 
 5. You should be able to log in as `catherine` now by using password `2222`
 
