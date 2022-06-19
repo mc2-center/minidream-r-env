@@ -64,6 +64,8 @@ Example: Adding a new student
 
 *Note*: Now, if you do: `docker compose exec -it rstudio ls`, you should be able to see `example.csv`
 
+>Please also always leave en empty line at the end of `example.csv`. Otherwise the code would miss adding the last user.  
+
 4. use `add_users` script to add users in `example.csv`: 
 `docker compose exec rstudio /root/utils/add_users.sh example.csv`
 
