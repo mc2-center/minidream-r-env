@@ -233,25 +233,12 @@ If you don't have any cron jobs running, this command would prompt you to set up
 *Note*: You might also need to ensure that the leader board is using the right query. To check out the query, click on the `$(leaderboard?XXX` part after clicking on "edit project wiki", and then click on "Edit synapse widget". You should be able to check out the query there. See an example here: 
 `select * from evaluation_<evaluation queue ID>  where module == "Module 2" `You want to make sure the evaluation Queue ID here as well as the column names are up to date. 
 
-## Add users to docker group
-1. Check existing users in docker group 
-```
-getent group docker
-```
-2. Add a new user to docker group
-```
-sudo usermod -a -G docker username
-```
-You should be able to see something like: 
-```
-docker:x:999:ubuntu,username
-```
 
 ## Other resources
  - [Milen's repo and documentation](https://github.com/milen-sage/minidream-r-env)
  - [Bruno's repo and documentation](https://github.com/Sage-Bionetworks/minidream-r-env/tree/bgrande/minidream-2021)
 
-## Support other minidream course work
+## Miscellaneous
 1. Check out leader board
 Check out the course page wiki. Check "scoreboards" section, and click on the relevant module. Then, click on "Wiki tools" widget  -> "Edit Project Wiki". You should be able to uncomment the line related to leaderboard. 
 
@@ -266,6 +253,33 @@ Check out file `submission_helpers.R` under folder R. This file by default could
  - Go to `/shared/R` folder
  - Update `submission_helpders.R` there by using `nano`
 *Note*: To save a file in nano, use `^O` (`ctrlO` on Mac)
+
+4. Grant sudo access
+This could be done by using `sudo usermod -a -G sudo username`
+
+5. Add users to docker group (Run docker commands without sudo)
+To be able to run docker without using `sudo`, we will have to add users to the docker group.
+
+1. Check existing users in docker group 
+```
+getent group docker
+```
+2. Add a new user to docker group
+```
+sudo usermod -a -G docker username
+```
+You should be able to see something like: 
+```
+docker:x:999:ubuntu,username
+```
+3. To activate the changes to the docker group without restarting docker daemon:
+```
+newgrp docker
+```
+
+*Note*: If the user is still getting error after the above steps, we might want to change group ownership of the `/var/run/docker.sock file` by using: `sudo chown root:docker /var/run/docker.sock`. 
+Reference could be found [here](https://linuxhandbook.com/docker-permission-denied/) and [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo#:~:text=I%20still%20had%20to%20give%20the%20/var/run/docker.sock%20socket%20and%20/var/run/docker%20directory%20the%20proper%20permissions%20to%20make%20it%20work%3A)
+
 
 
 
