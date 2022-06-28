@@ -268,6 +268,7 @@ getent group docker
 ```
 sudo usermod -a -G docker username
 ```
+*Note*: make sure that you are using jumpcloud username
 You should be able to see something like: 
 ```
 docker:x:999:ubuntu,username
