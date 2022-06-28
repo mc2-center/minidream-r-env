@@ -230,9 +230,44 @@ If you don't have any cron jobs running, this command would prompt you to set up
 - Update an module and re-broadcast it
 - Run cron job and see leaderboard gets reflected. To see the leaderboard, click on `wiki tools` -> Edit project Wiki -> uncomment the line related to `leaderboard` on [2022 CSBC PS-ON mini-DREAM Challenge](https://www.synapse.org/#!Synapse:syn29616137/wiki/617459)
 
+*Note*: You might also need to ensure that the leader board is using the right query. To check out the query, click on the `$(leaderboard?XXX` part after clicking on "edit project wiki", and then click on "Edit synapse widget". You should be able to check out the query there. See an example here: 
+`select * from evaluation_<evaluation queue ID>  where module == "Module 2" `You want to make sure the evaluation Queue ID here as well as the column names are up to date. 
+
+## Add users to docker group
+1. Check existing users in docker group 
+```
+getent group docker
+```
+2. Add a new user to docker group
+```
+sudo usermod -a -G docker username
+```
+You should be able to see something like: 
+```
+docker:x:999:ubuntu,username
+```
+
 ## Other resources
  - [Milen's repo and documentation](https://github.com/milen-sage/minidream-r-env)
  - [Bruno's repo and documentation](https://github.com/Sage-Bionetworks/minidream-r-env/tree/bgrande/minidream-2021)
+
+## Support other minidream course work
+1. Check out leader board
+Check out the course page wiki. Check "scoreboards" section, and click on the relevant module. Then, click on "Wiki tools" widget  -> "Edit Project Wiki". You should be able to uncomment the line related to leaderboard. 
+
+2. Clear submission 
+After testing out your own submission, you might want to clear out previous submission. To do that, please use the `challengeutils` package [here](https://github.com/Sage-Bionetworks/challengeutils)
+
+After installing `challengeutils` package, you could use `challengeutils delete-submission <submission id>` for deleting a certain submission. 
+
+3. Update submission helpers
+Check out file `submission_helpers.R` under folder R. This file by default could only edited by root user. You could edit it by following the steps: 
+ - Interact with the docker container as a root user `docker exec -it rstudio bin/bash`
+ - Go to `/shared/R` folder
+ - Update `submission_helpders.R` there by using `nano`
+*Note*: To save a file in nano, use `^O` (`ctrlO` on Mac)
+
+
 
 
 
