@@ -234,7 +234,7 @@ If you don't have any cron jobs running, this command would prompt you to set up
 *Note*: You might also need to ensure that the leader board is using the right query. To check out the query, click on the `$(leaderboard?XXX` part after clicking on "edit project wiki", and then click on "Edit synapse widget". You should be able to check out the query there. See an example here: 
 `select * from evaluation_<evaluation queue ID>  where module == "Module 2" `You want to make sure the evaluation Queue ID here as well as the column names are up to date. 
 
-## Other changes
+## Other important changes
 1. Update `Rprofile.site`
 Check out `minidream-r-env` folder and find `Rprofile.site`. To ensure that the latest packages get installed, please replace `options(repos = c(CRAN='https://mran.microsoft.com/snapshot/XX'), download.file.method = 'libcurl')` with the latest date. 
 
@@ -296,7 +296,8 @@ newgrp docker
 *Note*: If the user is still getting error after the above steps, we might want to change group ownership of the `/var/run/docker.sock file` by using: `sudo chown root:docker /var/run/docker.sock`. 
 Reference could be found [here](https://linuxhandbook.com/docker-permission-denied/) and [here](https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo#:~:text=I%20still%20had%20to%20give%20the%20/var/run/docker.sock%20socket%20and%20/var/run/docker%20directory%20the%20proper%20permissions%20to%20make%20it%20work%3A)
 
-
+6. Update forum link in `minidream-challenge/scoring_harness/messages.py`
+After students submit their work, they would get a message from the system. You could update `support_forum_url` and `challenge_instructions_url`
 
 
 
