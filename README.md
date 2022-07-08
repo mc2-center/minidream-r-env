@@ -200,6 +200,7 @@ Update the following scripts:
                             entity = activity_submission)
   ```
 
+
 *Note*: Double check if there's anything else that needs to be changed by checking into the `diff` between this year and last year. Here's an example of [diff](https://github.com/BrunoGrandePhD/minidream-challenge/commit/6209b57ab59555886ea7f0f4ccc27d33cce3ffc5#diff-c5cf203954ce9d9b80620f61683ed8b2f5cd43f55de42b4cb1b491f15eba7e12) between year 2020 and year 2021
 
 4. activate `minidream-2022` conda virtual environment and see if you could run the following line in `challenge_eval.sh` without errors: 
@@ -233,6 +234,20 @@ If you don't have any cron jobs running, this command would prompt you to set up
 *Note*: You might also need to ensure that the leader board is using the right query. To check out the query, click on the `$(leaderboard?XXX` part after clicking on "edit project wiki", and then click on "Edit synapse widget". You should be able to check out the query there. See an example here: 
 `select * from evaluation_<evaluation queue ID>  where module == "Module 2" `You want to make sure the evaluation Queue ID here as well as the column names are up to date. 
 
+## Other changes
+1. Update `Rprofile.site`
+Check out `minidream-r-env` folder and find `Rprofile.site`. To ensure that the latest packages get installed, please replace `options(repos = c(CRAN='https://mran.microsoft.com/snapshot/XX'), download.file.method = 'libcurl')` with the latest date. 
+
+2. To install packages globally (for all users), you could do it interactively. See an example here: 
+`docker exec rstudio install2.r ggfortify factoextra GGally`
+
+> Notes: the packages that get installed are: `install2.r, ggfortify, factoextra GGally`. The container is serving as an environment for students. After the container gets launched, a better way to install packages is to install them interactively like above. Otherwise, student's home directory would get wiped out. 
+
+For installing the latest dataset, you could do: 
+
+`docker exec rstudio R -q -e 'remotes::install_github("allisonhorst/palmerpenguins")`
+
+> Notes: the dataset on CRAN might be outdated. The GitHub version might contain the latest version of the dataset. 
 
 ## Other resources
  - [Milen's repo and documentation](https://github.com/milen-sage/minidream-r-env)
@@ -260,11 +275,11 @@ This could be done by using `sudo usermod -a -G sudo username`
 5. Add users to docker group (Run docker commands without sudo)
 To be able to run docker without using `sudo`, we will have to add users to the docker group.
 
-1. Check existing users in docker group 
+  1. Check existing users in docker group 
 ```
 getent group docker
 ```
-2. Add a new user to docker group
+  2. Add a new user to docker group
 ```
 sudo usermod -a -G docker username
 ```
@@ -273,7 +288,7 @@ You should be able to see something like:
 ```
 docker:x:999:ubuntu,username
 ```
-3. To activate the changes to the docker group without restarting docker daemon:
+  3. To activate the changes to the docker group without restarting docker daemon:
 ```
 newgrp docker
 ```
