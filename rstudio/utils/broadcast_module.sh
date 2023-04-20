@@ -5,7 +5,7 @@
 # $2 = group name
 #
 # Usage:
-# broadcast_module.sh /home/shared/modules/demo
+# broadcast_module.sh /home/shared/modules/module0 rstudio-user
 
 SHARED_MODULE=$(realpath $1)
 MODULE_NAME=$(basename $SHARED_MODULE)
@@ -24,14 +24,14 @@ for user in $GROUP_MEMBERS; do
         fi
 
         sudo rsync -ur $SHARED_MODULE $user_modules
-        sudo chown -R ${user}.rstudio-admin $user_modules
+        sudo chown -R "${user}":rstudio-admin $user_modules
         sudo find "${user_modules}/${MODULE_NAME}" \
             -name "session-persistent-state" \
-            | sudo xargs -n 1 -I{} rm {}
+            | sudo xargs -n 1 -I{} rm -f {}
         sudo find "${user_modules}/${MODULE_NAME}" \
             -type d \
             -name ".Rproj.user" \
             | xargs -n 1 -I {} sudo rm -rf {}
-        sudo rm "${user_modules}/${MODULE_NAME}/${MODULE_NAME}.nb.html"
+        sudo rm -f ${user_modules}/${MODULE_NAME}/*.nb.html
     fi
 done

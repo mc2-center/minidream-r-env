@@ -11,5 +11,5 @@ STUDENTS="$@"
 for student in $STUDENTS; do
    echo "Adding student: ${student}"
    sudo useradd -m -g rstudio-user -G student -s /bin/bash $student
-   echo "${student}:csbc" | sudo chpasswd
+   echo "${student}:csbcpson" | sudo chpasswd
 done
