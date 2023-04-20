@@ -35,8 +35,8 @@ RUN /usr/local/lib/R/site-library/littler/examples/installBioc.r \
     org.Hs.eg.db \
     pathview
 
-# Install synapser directly from source
-RUN R -e "remotes::install_github(repo='https://github.com/generalui/synapser/tree/reticulate', ref='reticulate')"
+# Install synapser using `install.packages()` (error when installed with install2.r)
+RUN R -e "install.packages('synapser', repos=c('http://ran.synapse.org', 'http://cran.fhcrc.org'))"
 
 # Install Python dependencies
 RUN pip3 install \
