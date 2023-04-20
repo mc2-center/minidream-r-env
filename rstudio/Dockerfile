@@ -1,5 +1,5 @@
 # rocker/tidyverse was built on rocker/rstudio (so, it includes RStudio)
-FROM rocker/tidyverse:4.1.0
+FROM rocker/tidyverse:4.2.2
 
 # Install OS-level dependencies
 # rsync needed for `broadcast_*` scripts
@@ -11,6 +11,7 @@ RUN apt-get update \
         libffi-dev \
         libglpk-dev \
         python3-pip \
+        python3.10-venv \
         rsync \
         zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
@@ -34,8 +35,8 @@ RUN /usr/local/lib/R/site-library/littler/examples/installBioc.r \
     org.Hs.eg.db \
     pathview
 
-# Install synapser using `install.packages()` (error when installed with install2.r)
-RUN R -e "install.packages('synapser', repos=c('http://ran.synapse.org', 'http://cran.fhcrc.org'))"
+# Install synapser directly from source
+RUN R -e "remotes::install_github(repo='https://github.com/generalui/synapser/tree/reticulate', ref='reticulate')"
 
 # Install Python dependencies
 RUN pip3 install \
