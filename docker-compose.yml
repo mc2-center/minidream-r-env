@@ -1,14 +1,18 @@
-version: '3'
+version: "3"
 services:
-
-  rstudio:
+  reverse_proxy:
+    container_name: "proxy"
     build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - /home:/home
-      - ../minidream-challenge-2018:/home/shared
-      - /home/${USER}/
+      context: "./proxy/"
+      dockerfile: "Dockerfile"
+    ports:
+      - "443:443"
+  rstudio:
+    container_name: "rstudio"
+    build:
+      context: "./rstudio/"
+      dockerfile: "Dockerfile"
     ports:
       - "8787:8787"
-
+    volumes:
+      - ../minidream-challenge:/shared
