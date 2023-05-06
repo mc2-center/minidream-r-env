@@ -10,8 +10,6 @@ RUN apt-get update \
     && apt-get -y install \
         libffi-dev \
         libglpk-dev \
-#        python3-pip \
-#       python3.10-venv \
         rsync \
         zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
