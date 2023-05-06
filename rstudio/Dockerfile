@@ -10,8 +10,8 @@ RUN apt-get update \
     && apt-get -y install \
         libffi-dev \
         libglpk-dev \
-        python3-pip \
-        python3.10-venv \
+#        python3-pip \
+#       python3.10-venv \
         rsync \
         zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
@@ -35,15 +35,23 @@ RUN /usr/local/lib/R/site-library/littler/examples/installBioc.r \
     org.Hs.eg.db \
     pathview
 
-# Install synapser using `install.packages()` (error when installed with install2.r)
-RUN R -e "install.packages('synapser', repos=c('http://ran.synapse.org', 'http://cran.fhcrc.org'))"
+# Install miniconda (required by synasper)
+ENV CONDA_DIR /opt/conda
+RUN wget --quiet \
+    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p /opt/conda
+ENV PATH=$CONDA_DIR/bin:$PATH
 
 # Install Python dependencies
-RUN pip3 install \
+RUN pip install \
     pandas \
     requests \
     rpy2 \
     synapseclient
+
+# Install synapser using `install.packages()` (error when installed with install2.r)
+RUN R -e "install.packages('synapser', repos=c('http://ran.synapse.org', 'http://cran.fhcrc.org'))"
 
 COPY config/Rprofile.site /usr/local/lib/R/etc/
 COPY config/rserver.conf /etc/rstudio/rserver.conf
