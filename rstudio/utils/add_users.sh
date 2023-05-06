@@ -15,7 +15,7 @@ while read line; do
     userpass="${a[1]}"
     groupstr=$(join_by , "${b[@]}")
     echo "Adding user $user to groups $groupstr"
-    useradd -m -p $(openssl passwd -crypt $userpass) -s /bin/bash $user
+    useradd -m -p $(openssl passwd -5 $userpass) -s /bin/bash $user
     usermod -a -G $groupstr $user
   fi
 done < "$1"
