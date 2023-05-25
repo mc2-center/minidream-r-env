@@ -82,38 +82,60 @@ From this point forward, you can:
 
 ---
 
-## Users
+## 👤 Users
 
-When the server is first built, two users are added as default - one admin, one student:
+When the server is first built, two default users are added - one admin, one student:
 
-```
+```csv
 admin,changeme,rstudio-user;rstudio-admin
 student,changeme,rstudio-user
 ```
 
-To add other users:
+where:
 
-1. Change directories to `rstudio/utils`.
+- the first field is the username, e.g. `admin`
+- the second field is the password, e.g. `changeme`
+- the third field is the user's group(s), e.g. `rstudio-user;rstudio-admin`
 
-2. Remove `users.csv` which is currently a symbolic link of `users.csv.template`:
+### Configure the User List
 
+1. Assuming you are still in the `minidream-r-env` directory, remove `rstudio/utils/users.csv` (which is currently a symbolic link of `users.csv.template`):
+
+   ```shell
+   rm rstudio/utils/users.csv
    ```
-   rm users.csv
-   ```
 
-3. Create a new `users.csv` within the `rstudio/utils` directory. Each line should contain 3 fields, delimited by a comma (do not include spaces!):
+2. Create a new `users.csv` within the `rstudio/utils/` directory. Each line should contain 3 fields, delimited by a comma (no spaces!):
 
    - username
    - password
-   - group
+   - group(s)
 
-   If the user is a student, `group` should be `rstudio-user`. If the user is an admin, `group` should be `rstudio-user;rstudio-admin`. See the default users list above for an example.
+   If the user is a student, their group should be `rstudio-user`. If the user is an admin, their groups should be `rstudio-user;rstudio-admin`. See the default users list above for an example.
 
-   > Leave en empty line at the end of the file to ensure the last user gets added
+   > **Note**: Leave en empty line at the end of the file to ensure the last user gets added
 
-4. Get the `CONTAINER ID` of the `rstudio` container with `docker ps`. For example:
+3. Stop the server and rebuild:
 
+   ```shell
+   docker compose
+   docker compose up --build -d
    ```
+   
+   This time, the server should be ready in less than a minute (assuming no changes have been made to the server Dockerfile). Once ready, go to http://minidream.synapse.org/ and try:
+   * Logging in as a student
+   * Logging in as an admin
+   * Changing the password of a sample user with `passwd` (in the terminal)
+
+### Adding New Users
+
+If the course is already in progress, you can add new users with the `add_users` tool.
+
+1. Create a new CSV file, following the same format as above.
+
+2. Get the `CONTAINER ID` of the `rstudio` container with `docker ps`. For example:
+
+   ```shell
    $ docker ps
    CONTAINER ID   IMAGE
    fc9ac0f0f15f   minidream-r-env-rstudio
@@ -122,10 +144,10 @@ To add other users:
 
    The container ID would be `fc9ac0f0f15f`.
 
-5. Copy `users.csv` into the container:
+3. Copy the CSV into the container:
 
    ```
-   docker cp users.csv <container id>:users.csv
+   docker cp <new user list> <container id>:<new user list>
    ```
 
    You can check that the file has been copied over with:
@@ -134,19 +156,13 @@ To add other users:
    docker compose exec -it rstudio ls
    ```
 
-6. Add the users to the server:
+4. Add the new users to the server:
 
     ```
-    docker compose exec rstudio /root/utils/add_users.sh users.csv
+    docker compose exec rstudio /root/utils/add_users.sh <new user list>
     ```
 
     You should now be able to log in as one of the newly added users.
-
-✅ **You should now try:**
-
-- Logging in as a student
-- Logging in as an admin
-- Changing the password of a sample user with `passwd` (in the terminal)
 
 ### Other Useful Resources
 
