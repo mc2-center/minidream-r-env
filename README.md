@@ -1,8 +1,15 @@
-# minidream-r-env
+<h1 align="center">
+  miniDREAM R-Environment
+</h1>
 
-Resources for setting up and managing an RStudio environment for interactive miniDREAM activities
+<h3 align="center">
+  Resources for setting up and managing an RStudio environment for interactive miniDREAM activities
+</h3>
+<br/>
 
-## Setup
+
+
+## 🛠️ Setup
 
 ### AWS
 
@@ -12,19 +19,7 @@ Resources for setting up and managing an RStudio environment for interactive min
 
 ### RStudio Server
 
-1. Install Docker-CE on Ubuntu EC2 instance: https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository
-
-   _Note_: If you have the following error after running `sudo apt-get update` : Conflicting values set for option Signed-By regarding source https://download.docker.com/linux/ubuntu/ bionic: /usr/share/keyrings/docker-archive-keyring.gpg != The list of sources could not be read, please remove `docker.list` in `/etc/apt/sources.list.d`
-
-   If you are seeing:
-
-   ```
-   /etc/apt/sources.list.d$ ls
-
-   docker.list  download_docker_com_linux_ubuntu.list
-   ```
-
-   You could try removing `docker.list` and run `sudo apt-get update` command again.
+1. Install [Docker-CE](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository) onto the instance if it's not already available.
 
 2. Allow for [non-root users to manage Docker](https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user).
 
@@ -33,11 +28,12 @@ Resources for setting up and managing an RStudio environment for interactive min
    ```
    DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
    mkdir -p $DOCKER_CONFIG/cli-plugins
-   curl -SL https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+   curl -SL https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-linux-x86_64 \
+      -o $DOCKER_CONFIG/cli-plugins/docker-compose
    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
    ```
 
-   _Note_: you can test the installation with `docker compose version`
+   You can test the installation with `docker compose version`.
 
 4. Clone the repository containing the miniDREAM course modules onto the instance. For example:
 
@@ -58,7 +54,7 @@ Resources for setting up and managing an RStudio environment for interactive min
    docker compose up --build -d
    ```
 
-   It will take around 15 minutes to build the server for the first time. Once complete, you will see the following:
+   It will take around 15 minutes to build the server for the first time. Once complete, you should see the following:
 
    ```shell
    ...
@@ -68,11 +64,21 @@ Resources for setting up and managing an RStudio environment for interactive min
    ✔ Container proxy                  Started                            0.6s
    ```
 
-   _Note_: `-d` starts the containers in the background and leaves them running.
+**Congrats!** 🎉 The interactive RStudio environment is now available at http://minidream.synapse.org/.
 
-**Congrats!** 🎉
+From this point forward, you can:
 
-The interactive RStudio environment is now available at http://minidream.synapse.org/.
+* start the server with:
+
+   ```shell
+   docker compose up -d
+   ```
+ 
+* stop the server with:
+
+   ```shell
+   docker compose down
+   ```
 
 ---
 
