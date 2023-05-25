@@ -3,23 +3,26 @@
 </h1>
 
 <h3 align="center">
-  Resources for setting up and managing an RStudio environment for interactive miniDREAM activities
+  Resources for setting up and managing an RStudio environment for interactive 
+  miniDREAM activities
 </h3>
 <br/>
-
-
 
 ## 🛠️ Setup
 
 ### AWS
 
-1. Choose an Ubuntu-based instance, as Ubuntu readily comes with `apt-get` and Python. We recommend researching Ubuntu's ideal version with its [end of life plot](https://www.ubuntu.com/info/release-end-of-life). For example: `v16.04` is the most ideal in the year 2018.
+1. Choose an Ubuntu-based instance, as Ubuntu readily comes with `apt-get` and
+   Python. We recommend researching Ubuntu's ideal version with its
+   [end of life plot](https://www.ubuntu.com/info/release-end-of-life). For
+   example: `v16.04` is ideal for the year 2018.
 
 2. AWS Security groups need to have a TCP rule to open port number 8787.
 
 ### RStudio Server
 
-1. Install [Docker-CE](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository) onto the instance if it's not already available.
+1. Install [Docker-CE](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository)
+   onto the instance if it's not already available.
 
 2. Allow for [non-root users to manage Docker](https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user).
 
@@ -35,7 +38,8 @@
 
    You can test the installation with `docker compose version`.
 
-4. Clone the repository containing the miniDREAM course modules onto the instance. For example:
+4. Clone the repository containing the miniDREAM course modules onto the
+   instance. For example:
 
    ```shell
    git clone --branch minidream2023 https://github.com/mc2-center/minidream-challenge.git
@@ -54,7 +58,8 @@
    docker compose up --build -d
    ```
 
-   It will take around 15 minutes to build the server for the first time. Once complete, you should see the following:
+   It will take around 15 minutes to build the server for the first time. Once
+   complete, you should see the following:
 
    ```shell
    ...
@@ -64,27 +69,29 @@
    ✔ Container proxy                  Started                            0.6s
    ```
 
-**Congrats!** 🎉 The interactive RStudio environment is now available at http://minidream.synapse.org/.
+**Congrats!** 🎉 The interactive RStudio environment is now available at
+http://minidream.synapse.org/.
 
 From this point forward, you can:
 
-* start the server with:
+- start the server with:
 
-   ```shell
-   docker compose up -d
-   ```
- 
-* stop the server with:
+  ```shell
+  docker compose up -d
+  ```
 
-   ```shell
-   docker compose down
-   ```
+- stop the server with:
+
+  ```shell
+  docker compose down
+  ```
 
 ---
 
 ## 👤 Users
 
-When the server is first built, two default users are added - one admin, one student:
+When the server is first built, two default users are added - one instructor
+(admin), one student:
 
 ```csv
 admin,changeme,rstudio-user;rstudio-admin
@@ -99,21 +106,27 @@ where:
 
 ### Configure the User List
 
-1. Assuming you are still in the `minidream-r-env` directory, remove `rstudio/utils/users.csv` (which is currently a symbolic link of `users.csv.template`):
+1. Assuming you are still in the `minidream-r-env` directory, remove
+   `rstudio/utils/users.csv` (which is currently a symbolic link of
+   `users.csv.template`):
 
-   ```shell
+   ```
    rm rstudio/utils/users.csv
    ```
 
-2. Create a new `users.csv` within the `rstudio/utils/` directory. Each line should contain 3 fields, delimited by a comma (no spaces!):
+2. Create a new `users.csv` within the `rstudio/utils/` directory. Each line
+   should contain 3 fields, delimited by a comma (no spaces!):
 
    - username
    - password
    - group(s)
 
-   If the user is a student, their group should be `rstudio-user`. If the user is an admin, their groups should be `rstudio-user;rstudio-admin`. See the default users list above for an example.
+   If the user is a student, their group should be `rstudio-user`. If the user
+   is an admin, their groups should be `rstudio-user;rstudio-admin`. See the
+   default users list above for an example.
 
-   > **Note**: Leave en empty line at the end of the file to ensure the last user gets added
+   > **Note**: Leave en empty line at the end of the file to ensure the last
+   > user gets added
 
 3. Stop the server and rebuild:
 
@@ -121,19 +134,24 @@ where:
    docker compose
    docker compose up --build -d
    ```
-   
-   This time, the server should be ready in less than a minute (assuming no changes have been made to the server Dockerfile). Once ready, go to http://minidream.synapse.org/ and try:
-   * Logging in as a student
-   * Logging in as an admin
-   * Changing the password of a sample user with `passwd` (in the terminal)
+
+   This time, the server should be ready in less than a minute (assuming no
+   changes have been made to the server Dockerfile). Once ready, go to
+   http://minidream.synapse.org/ and try:
+
+   - Logging in as a student
+   - Logging in as an admin
+   - Changing the password of a sample user with `passwd` (in the terminal)
 
 ### Adding New Users
 
-If the course is already in progress, you can add new users with the `add_users` tool.
+If the course is already in progress, you can add new users with the `add_users`
+tool.
 
 1. Create a new CSV file, following the same format as above.
 
-2. Get the `CONTAINER ID` of the `rstudio` container with `docker ps`. For example:
+2. Get the `CONTAINER ID` of the `rstudio` container with `docker ps`. For
+   example:
 
    ```shell
    $ docker ps
@@ -162,70 +180,112 @@ If the course is already in progress, you can add new users with the `add_users`
     docker compose exec rstudio /root/utils/add_users.sh <new user list>
     ```
 
-    You should now be able to log in as one of the newly added users.
+   You should now be able to log in as one of the newly added users.
 
 ### Other Useful Resources
 
 - `rstudio-server --help`
-  
-  For example: `rstudio-server suspend-all` will remove the message: "ERROR session hadabend" from an R session console after each service 'reboot'.
+
+  For example: `rstudio-server suspend-all` will remove the message: "ERROR
+  session hadabend" from an R session console after each service 'reboot'.
+
 - https://hub.docker.com/u/rocker/
 - [Bruno's RStudio environment walkthrough](https://www.synapse.org/#!Synapse:syn29616137/wiki/617456)
 
 ---
 
-## Modules
+## 📚 Modules
 
-### Explanation of "shared" folder in Rstudio container
+When the server is first built, none of the modules from the `minidream-challenge`
+directory will be available on RStudio - each module will need to be shared
+with the users. We recommend sharing one module at a time, following the same
+pace as the miniDREAM course.
 
-1. Try interacting with R studio container by using the following command:
-    ```
-    docker exec -it rstudio bin/bash
-    ```
+> **Note**: the server has been configured to mount the modules and other course
+> materials as `/shared` in the `rstudio` container, that is:
+>
+> **docker-compose.yml**
+>
+> ```
+> ...
+> volumes:
+>   - ../minidream-challenge:/shared
+> ```
+>
+> If you list the files of `/shared` with `docker compose exec -it rstudio ls -l /shared`,
+> you should see that it matches the `minidream-challenge` directory.
 
-2. You should be able to find `shared` folder by doing `ls`. You should also be able to find `broadcast_module.sh` in `root/utils` folder and `module0` in `shared/modules` folder
+### Broadcasting a Module
 
-3. Then, you could `cd shared` and find out that the content within `shared` folder is the same as `minidream-challenge` repo. If you create a new test file by using `touch test`, you would notice that this `test` file gets sync to `minidream-challenge` repo as well. This is because in our `docker-compose.yml`, we have the following:
+Let's go through an exercise of broadcasting a module to Rstudio, starting
+with Module 0.
 
-    ```
-    volumes:
-      - ../minidream-challenge:/shared
-    ```
-
-4. Exit the container interactive environment by doing: `exit`
-
-### Broadcasting module
-
-1. `cd minidream-r-env`
-2. Try broadcast module 0 to rstudio-user:
-
-```
-docker compose exec rstudio root/utils/broadcast_module.sh shared/modules/module0 rstudio-user
-```
-
-3. For updating module content, try to interact with docker container by doing: `docker exec -it rstudio bin/bash`, and then copy new module content to `/shared/modules/<module_name>` (i.e. via scp). After making all the changes, try re-broadcast the content by repeating step 1 and 2.
-
-### Relevant tests
-
-- Broadcast module 0 to rstudio-users
-- Update module content
-
-### Adding symbolic link to docker container
-
-Open `rstudio-overview_activity.rmd` of folder `module 0` in R studio environment. We could see the following code in the beginning:
+For a quick overview, list the available modules that can be broadcasted. For
+example:
 
 ```
-data_dir <- "/home/shared/data"
-scripts_dir <- "/home/shared/R"
-source(file.path(scripts_dir, "submission_helpers.R"))
+$ docker compose exec -it rstudio ls -l /shared/modules
+total 32
+drwxrwxr-x 4 user rstudio-user 4096 May 23 17:19 module0
+drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 module1
+drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 module2
+drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 module3
+drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 module4
+drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 module5
+drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 module6
+drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 welcome
 ```
 
-To make sure that all file paths are valid, we could create a symbolic link in R studio container by doing the following:
+1. Assuming you are in the `minidream-r-env` directory, run the `broadcast_module`
+   tool:
 
-- `docker compose exec -it -w /root/utils rstudio ls`
-- `ln -s /shared /home/shared`
+   ```
+   docker compose exec rstudio root/utils/broadcast_module.sh shared/modules/module0 rstudio-user
+   ```
 
-_Note_: `/shared` is the source folder, and `/home/shared` is the symbolic link.
+   This will share the contents of `shared/modules/module0` to all users
+   belonging to the `rstudio-user` group (which should be all of the users
+   in RStudio).  A `modules` directory should now be available in the Files
+   pane in RStudio.
+
+2. (One-time only) Some course materials are dependent on scripts located at
+   `home/shared/R`, which does not exist when the server is first built. Create
+   a symbolic link in the `rstudio` container so that this filepath exists:
+
+   ```
+   docker compose exec -it rstudio ln -s /shared /home/shared
+   ```
+
+   The notebooks inside `module0` are now ready to run!
+
+### Updating a Module
+
+1. From the home directory, pull the changes:
+
+   ```
+   git pull minidream-challenge
+   ```
+
+   Alternatively, changes can be directly applied inside the directory on the
+   instance:
+
+   ```
+   vim minidream-challenge/modules/<module name>/<notebook>
+   ```
+
+2. Copy the new module contents to the container. For example:
+
+   ```
+   docker cp minidream-challenge/modules/module0/intro-to-RStudio.Rmd fc9ac0f0f15f:
+   ```
+
+3. Switch to the `minidream-r-env` directory and re-broadcast the module:
+
+   ```
+   docker compose exec rstudio root/utils/broadcast_module.sh shared/modules/module0 rstudio-user
+   ```
+
+---
 
 ### Module submission and cron job
 
