@@ -108,8 +108,8 @@ volumes:
    - ../minidream-challenge:/shared
 ```
 
-If you list the files of `/shared`, the files listed will match the
-`minidream-challenge` directory.
+If you list the files of `/shared` with `docker compose exec -it rstudio ls -l /shared`,
+the files listed will match the `minidream-challenge` directory.
 
 When a volume is mounted, it will preserve the same permissions it has on the
 host. For example, let's say `minidream-challenge` has read-write-execute
@@ -171,7 +171,7 @@ where:
 3. Stop the server and rebuild:
 
    ```shell
-   docker compose
+   docker compose down
    docker compose up --build -d
    ```
 
@@ -243,7 +243,7 @@ pace as the miniDREAM course.
 
 ### Broadcasting a Module
 
-Let's go through an exercise of broadcasting a module to Rstudio, starting
+Let's go through an exercise of broadcasting a module to RStudio, starting
 with Module 0.
 
 For a quick overview, list the available modules that can be broadcasted. For
@@ -277,14 +277,14 @@ drwxrwxr-x 3 admin rstudio-admin 4096 May 23 17:07 welcome
    pane in RStudio.
 
 2. (One-time only) Some course materials are dependent on scripts located at
-   `home/shared/R`, which does not exist when the server is first built. Create
+   `/home/shared/R`, which does not exist when the server is first built. Create
    a symbolic link in the `rstudio` container so that this filepath exists:
 
    ```
    docker compose exec -it rstudio ln -s /shared /home/shared
    ```
 
-   The notebooks inside `module0` are now ready to run!
+**Congrats!** 🎉 You just launched your first module!
 
 ### Updating a Module
 
@@ -452,8 +452,17 @@ For installing the latest dataset, you could do:
 
 > Notes: the dataset on CRAN might be outdated. The GitHub version might contain the latest version of the dataset.
 
-## Other resources
+---
 
+## Helpful Resources
+
+- `rstudio-server --help`
+
+  For example: `rstudio-server suspend-all` will remove the message: "ERROR
+  session hadabend" from an R session console after each service 'reboot'.
+
+- https://hub.docker.com/u/rocker/
+- [Bruno's RStudio environment walkthrough](https://www.synapse.org/#!Synapse:syn29616137/wiki/617456)
 - [Milen's repo and documentation](https://github.com/milen-sage/minidream-r-env)
 - [Bruno's repo and documentation](https://github.com/Sage-Bionetworks/minidream-r-env/tree/bgrande/minidream-2021)
 
