@@ -92,9 +92,6 @@ From this point forward, you can:
   docker compose down
   ```
 
-  > **Note**: stopping the server will reset the RStudio contents, e.g.
-  > modules will be removed, etc.
-
 ### Shared Files
 
 By default, the server is configured to bind-mount `minidream-challenge` as
