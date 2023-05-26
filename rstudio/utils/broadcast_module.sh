@@ -27,11 +27,11 @@ for user in $GROUP_MEMBERS; do
         sudo chown -R "${user}":rstudio-admin $user_modules
         sudo find "${user_modules}/${MODULE_NAME}" \
             -name "session-persistent-state" \
-            | sudo xargs -n 1 -I{} rm -f {}
+            | sudo xargs -I {} rm -f {}
         sudo find "${user_modules}/${MODULE_NAME}" \
             -type d \
             -name ".Rproj.user" \
-            | xargs -n 1 -I {} sudo rm -rf {}
+            | xargs -I {} sudo rm -rf {}
         sudo rm -f ${user_modules}/${MODULE_NAME}/*.nb.html
     fi
 done
