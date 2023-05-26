@@ -36,7 +36,7 @@
    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
    ```
 
-   You can test the installation with `docker compose version`.
+   You can test the installation with `docker compose version`
 
 4. Clone the repository containing the miniDREAM course modules onto the
    instance. For example:
@@ -44,6 +44,12 @@
    ```shell
    git clone --branch minidream2023 https://github.com/mc2-center/minidream-challenge.git
    ```
+
+   When building the server, it will expect the directory of course
+   materials to be named `minidream-challenge`. If you are not using
+   [minidream-challenge](https://github.com/mc2-center/minidream-challenge.git)
+   as the source of course materials, edit `docker-compose.yml` so that the
+   correct volume is mounted. See [Shared Files](#shared-files) for more details.
 
 5. Clone **this** repository onto the instance:
 
@@ -58,8 +64,8 @@
    docker compose up --build -d
    ```
 
-   It will take around 15 minutes to build the server for the first time. Once
-   complete, you should see the following:
+   It will take around 15-20 minutes to build the server for the first time.
+   Once complete, you should see the following:
 
    ```shell
    ...
@@ -85,6 +91,40 @@ From this point forward, you can:
   ```shell
   docker compose down
   ```
+
+  > **Note**: stopping the server will reset the RStudio contents, e.g.
+  > modules will be removed, etc.
+
+### Shared Files
+
+By default, the server is configured to bind-mount `minidream-challenge` as
+`/shared` in the `rstudio` container:
+
+**docker-compose.yml**
+
+```
+...
+volumes:
+   - ../minidream-challenge:/shared
+```
+
+If you list the files of `/shared`, the files listed will match the
+`minidream-challenge` directory.
+
+When a volume is mounted, it will preserve the same permissions it has on the
+host. For example, let's say `minidream-challenge` has read-write-execute
+enabled for everyone (user, group, other) on the host; when it gets mounted,
+`/shared` will also have read-write-execute enabled for everyone.
+
+To ensure that only the admins are allowed editing rights to the course
+materials on RStudio, change the group ownership as well as their permissions:
+
+```
+docker compose exec rstudio chgrp -R rstudio-admin /shared \
+   && docker compose exec rstudio chmod g+rw /shared
+```
+
+Check the group ownership of `/shared` (just in case) with `docker compose exec -it rstudio ls -l /shared`
 
 ---
 
@@ -176,9 +216,9 @@ tool.
 
 4. Add the new users to the server:
 
-    ```
-    docker compose exec rstudio /root/utils/add_users.sh <new user list>
-    ```
+   ```
+   docker compose exec rstudio /root/utils/add_users.sh <new user list>
+   ```
 
    You should now be able to log in as one of the newly added users.
 
@@ -201,20 +241,6 @@ directory will be available on RStudio - each module will need to be shared
 with the users. We recommend sharing one module at a time, following the same
 pace as the miniDREAM course.
 
-> **Note**: the server has been configured to mount the modules and other course
-> materials as `/shared` in the `rstudio` container, that is:
->
-> **docker-compose.yml**
->
-> ```
-> ...
-> volumes:
->   - ../minidream-challenge:/shared
-> ```
->
-> If you list the files of `/shared` with `docker compose exec -it rstudio ls -l /shared`,
-> you should see that it matches the `minidream-challenge` directory.
-
 ### Broadcasting a Module
 
 Let's go through an exercise of broadcasting a module to Rstudio, starting
@@ -226,26 +252,28 @@ example:
 ```
 $ docker compose exec -it rstudio ls -l /shared/modules
 total 32
-drwxrwxr-x 4 user rstudio-user 4096 May 23 17:19 module0
-drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 module1
-drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 module2
-drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 module3
-drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 module4
-drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 module5
-drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 module6
-drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 welcome
+drwxrwxr-x 4 admin rstudio-admin 4096 May 25 23:09 module0
+drwxrwxr-x 3 admin rstudio-admin 4096 May 23 17:07 module1
+drwxrwxr-x 3 admin rstudio-admin 4096 May 23 17:07 module2
+drwxrwxr-x 3 admin rstudio-admin 4096 May 23 17:07 module3
+drwxrwxr-x 3 admin rstudio-admin 4096 May 23 17:07 module4
+drwxrwxr-x 3 admin rstudio-admin 4096 May 23 17:07 module5
+drwxrwxr-x 3 admin rstudio-admin 4096 May 23 17:07 module6
+drwxrwxr-x 3 admin rstudio-admin 4096 May 23 17:07 welcome
 ```
 
 1. Assuming you are in the `minidream-r-env` directory, run the `broadcast_module`
    tool:
 
    ```
-   docker compose exec rstudio root/utils/broadcast_module.sh shared/modules/module0 rstudio-user
+   docker compose exec rstudio root/utils/broadcast_module.sh \
+      shared/modules/module0 \
+      rstudio-user
    ```
 
    This will share the contents of `shared/modules/module0` to all users
    belonging to the `rstudio-user` group (which should be all of the users
-   in RStudio).  A `modules` directory should now be available in the Files
+   in RStudio). A `modules` directory should now be available in the Files
    pane in RStudio.
 
 2. (One-time only) Some course materials are dependent on scripts located at
@@ -276,18 +304,22 @@ drwxrwxr-x 3 user rstudio-user 4096 May 23 17:07 welcome
 2. Copy the new module contents to the container. For example:
 
    ```
-   docker cp minidream-challenge/modules/module0/intro-to-RStudio.Rmd fc9ac0f0f15f:
+   docker cp \
+      minidream-challenge/modules/module0/intro-to-RStudio.Rmd \
+      fc9ac0f0f15f:/shared/modules/module0/.
    ```
 
 3. Switch to the `minidream-r-env` directory and re-broadcast the module:
 
    ```
-   docker compose exec rstudio root/utils/broadcast_module.sh shared/modules/module0 rstudio-user
+   docker compose exec rstudio root/utils/broadcast_module.sh \
+      shared/modules/module0 \
+      rstudio-user
    ```
 
 ---
 
-### Module submission and cron job
+## 🔄 Submission System
 
 1. Install mini conda on EC2 instance
 
