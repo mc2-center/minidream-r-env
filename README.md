@@ -92,6 +92,9 @@ From this point forward, you can:
   docker compose down
   ```
 
+   > **Note**: stopping the server will reset the RStudio contents, e.g.
+   > modules will be removed, etc.
+
 ### Shared Files
 
 By default, the server is configured to bind-mount `minidream-challenge` as
@@ -161,9 +164,6 @@ where:
    If the user is a student, their group should be `rstudio-user`. If the user
    is an admin, their groups should be `rstudio-user;rstudio-admin`. See the
    default users list above for an example.
-
-   > **Note**: Leave en empty line at the end of the file to ensure the last
-   > user gets added
 
 3. Stop the server and rebuild:
 
