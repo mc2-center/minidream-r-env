@@ -95,6 +95,32 @@ From this point forward, you can:
    > **Note**: stopping the server will reset the RStudio contents, e.g.
    > modules will be removed, etc.
 
+### Packages/Libraries
+
+The RStudio server will come pre-installed with the following packages/libraries:
+
+* BiocManager
+* bitops
+* caTools
+* clusterProfiler
+* DOSE
+* getPass
+* here
+* imager
+* org.Hs.eg.db
+* pathview
+* revealjs
+* survival
+* tidyverse
+* tsne
+
+To install a new package to the server, do:
+
+```
+docker compose exec -it rstudio R -e "install.packages('<package name>')"
+```
+
+
 ### Shared Files
 
 By default, the server is configured to bind-mount `minidream-challenge` as
