@@ -219,16 +219,6 @@ tool.
 
    You should now be able to log in as one of the newly added users.
 
-### Other Useful Resources
-
-- `rstudio-server --help`
-
-  For example: `rstudio-server suspend-all` will remove the message: "ERROR
-  session hadabend" from an R session console after each service 'reboot'.
-
-- https://hub.docker.com/u/rocker/
-- [Bruno's RStudio environment walkthrough](https://www.synapse.org/#!Synapse:syn29616137/wiki/617456)
-
 ---
 
 ## 📚 Modules
