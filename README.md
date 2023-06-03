@@ -120,6 +120,10 @@ To install a new package to the server, do:
 docker compose exec -it rstudio R -e "install.packages('<package name>')"
 ```
 
+> **Note**: to ensure the latest packages are installed, replace
+> `options(repos = c(CRAN='https://mran.microsoft.com/snapshot/XX'), download.file.method = 'libcurl')`
+> within `rstudio/config/Rprofile.site` with the latest date.
+
 
 ### Shared Files
 
@@ -213,22 +217,10 @@ tool.
 
 1. Create a new CSV file, following the same format as above.
 
-2. Get the `CONTAINER ID` of the `rstudio` container with `docker ps`. For
-   example:
-
-   ```shell
-   $ docker ps
-   CONTAINER ID   IMAGE
-   fc9ac0f0f15f   minidream-r-env-rstudio
-   d070e1f30b37   minidream-r-env-reverse_proxy
-   ```
-
-   The container ID would be `fc9ac0f0f15f`.
-
-3. Copy the CSV into the container:
+2. Copy the CSV into the `rstudio` container:
 
    ```
-   docker cp <new user list> <container id>:<new user list>
+   docker cp <new user list> rstudio:<new user list>
    ```
 
    You can check that the file has been copied over with:
@@ -237,7 +229,7 @@ tool.
    docker compose exec -it rstudio ls
    ```
 
-4. Add the new users to the server:
+3. Add the new users to the server:
 
    ```
    docker compose exec rstudio /root/utils/add_users.sh <new user list>
@@ -332,138 +324,161 @@ drwxrwxr-x 3 admin rstudio-admin 4096 May 23 17:07 welcome
 
 ---
 
-## 🔄 Submission System
+## 🔄 Scoring Harness
 
-1. Install mini conda on EC2 instance
+> **Note**: this section will assume you are using `minidream-challenge` as
+> the source for course materials.
 
-- Make a folder for `miniconda 3`: `mkdir miniconda3`
-- Get the latest version:
-  `wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda3/miniconda.sh`
-- unpack the package:
-  `bash miniconda3/miniconda.sh -b -u`
-- remove `.sh` script:
-  `rm -rf miniconda3/miniconda.sh`
-- For bash use:
-  `miniconda3/bin/conda init bash`
-- `miniconda3/bin/conda init zsh`
-  See the source (here)[https://engineeringfordatascience.com/posts/install_miniconda_from_the_command_line/]
+### Setup
 
-2. Create an virtual environment called `minidream-2022` by using existing `environment.yml` in `minidream-challenge`
+1. In either the same instance or a new one, install the latest version of Miniconda:
 
-- Edit `environment.yml` to ensure that it reflects your new environment name `minidream-2022`
-- Create the environment by using `conda env create -f environment.yml`
-- activate the virtual env: `conda activate minidream-2022`
-
-3. Module submission:
-   [A cron job](https://help.ubuntu.com/community/CronHowto#Starting_to_Use_Cron) calls `minidream-challenge/scoring_harness/challenge_eval.sh` and runs every day every minute to capture submission. `minidream-challenge/scoring_harness/challenge_eval.sh` then calls `challenge.py` for scoring, and `challenge.py` calls `challenge_config.py`.
-
-Update the following scripts:
-
-1. `challenge_eval.sh`
-
-- Make sure that the virtual environment has the correct path
-- Make sure that you added youself for receiving email messages (add `-u "<Your synapse username>"`) after `python3 $script_dir/challenge.py`
-
-2. `challenge_config.py`
-
-- Update CHALLENGE_SYN_ID. This should point to the challenge page. For year 2022, it is `2022 CSBC PS-ON mini-DREAM Challenge`
-- Update CHALLENGE_NAME
-- Update ADMIN_USER_IDS. This should be your found on your profile page. (Example, for Lingling, this is the [profile page](https://www.synapse.org/#!Profile:3443707/profile))
-- Update evaluation queues
-
-  - for Year 2022, you could find the evaluation queue number [here](https://www.synapse.org/#!Synapse:syn29616137/challenge/)
-
-  - see the line here:
-
-  ```
-  evaluation_queues = [
-  {
-    'id':<need to be updated>,
-    'scoring_func':score,
-  }
-  ]
-  ```
-
-3. `R/submission_helpers`
-   - update `syn id` of modules.
    ```
-   submission_folder <- switch(
-    module,
-    "0" = "syn18818751",
-    "1" = "syn18818752",
-    "2" = "syn18818753",
-    "3" = "syn18818755",
-    "4" = "syn18818756",
-    "5" = "syn18818757",
-    "7" = "syn18818759"
-    "0" = "syn25653272",
-    "1" = "syn25653301",
-    "2" = "syn25653326",
-    "3" = "syn25653327",
-    "4" = "syn25653347",
-    "5" = "syn25653365",
-    "7" = "syn25653405")
+   mkdir -p ~/miniconda3
+   wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+   bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3 \
+      && rm -rf ~/miniconda3/miniconda.sh
+   miniconda3/bin/conda init bash
    ```
-   - update evaluation ID:
 
-```
-    submission <- synSubmit(evaluation = "<need to be updated>",
-                          entity = activity_submission)
-```
+2. Exit the instance (to apply the changes), then log back in.
 
-_Note_: Double check if there's anything else that needs to be changed by checking into the `diff` between this year and last year. Here's an example of [diff](https://github.com/BrunoGrandePhD/minidream-challenge/commit/6209b57ab59555886ea7f0f4ccc27d33cce3ffc5#diff-c5cf203954ce9d9b80620f61683ed8b2f5cd43f55de42b4cb1b491f15eba7e12) between year 2020 and year 2021
+3. Assuming you are in the home directory, create a new environment from file:
 
-4. activate `minidream-2022` conda virtual environment and see if you could run the following line in `challenge_eval.sh` without errors:
+   ```
+   conda env create -f minidream-challenge/environment.yml
+   ```
 
-- After defining `script_dir` here: `export script_dir="$HOME/minidream-challenge/scoring_harness"`
-- Run the script without errors
+   This will create a virtual environment called `minidream` that will contain
+   all of the necessary Python and R libraries to run the scoring harness.
 
-```
-python3 $script_dir/challenge.py
-```
+4. Activate the virtual environment.
 
-5. Check out intro of cron job [here](https://help.ubuntu.com/community/CronHowto#Starting_to_Use_Cron)
+   ```
+   conda activate minidream
+   ```
 
-6. Run the following to set up cron job for running every day, every minute:
+5. In the home directory, create a new file called `.synapseConfig`, which
+   will contain a Synapse Personal Access Token (PAT) needed to run the
+   submission system:
 
-```
-crontab -e
-```
+   ```
+   [authentication]
+   authtoken=YOUR-PERSONAL-ACCESS-TOKEN-HERE
+   ```
 
-If you don't have any cron jobs running, this command would prompt you to set up one. You could then put the following line:
+   Credentials used should have editing rights to the miniDREAM challenge
+   site. [Go here to generate a new PAT](https://www.synapse.org/#!PersonalAccessTokens:).
 
-```
-* * * * * /home/<your username>/minidream-challenge/scoring_harness/challenge_eval.sh
-```
+### Configure the Workflow
 
-_Note_: You have to use an absolute path to `challenge_eval.sh`
+Within `minidream-challenge`, edit the following scripts:
 
-7. Check out the log here: `scoring_harness/log/score.log`
+* `scoring_harness/challenge_eval.sh`
 
-### Relevant tests:
+   - Update the absolute path to the conda virtual environment on your machine
 
-- Broadcast module 0 in R studio environment
-- Update an module and re-broadcast it
-- Run cron job and see leaderboard gets reflected. To see the leaderboard, click on `wiki tools` -> Edit project Wiki -> uncomment the line related to `leaderboard` on [2022 CSBC PS-ON mini-DREAM Challenge](https://www.synapse.org/#!Synapse:syn29616137/wiki/617459)
+* `scoring_harness/challenge_config.py`
 
-_Note_: You might also need to ensure that the leader board is using the right query. To check out the query, click on the `$(leaderboard?XXX` part after clicking on "edit project wiki", and then click on "Edit synapse widget". You should be able to check out the query there. See an example here:
-`select * from evaluation_<evaluation queue ID>  where module == "Module 2" `You want to make sure the evaluation Queue ID here as well as the column names are up to date.
+   - Update CHALLENGE_SYN_ID to the synID of the project for the challenge site.
+   - Update CHALLENGE_NAME
+   - Update the list of ADMIN_USER_IDS to contain the user IDs of 
+   - Update the evaluation IDs in `evaluation queues`:
 
-## Other important changes
+      ```
+      evaluation_queues = [
+         {
+            'id': <need to be updated>,
+            'scoring_func': score,
+         }
+      ]
+      ```
 
-1. Update `Rprofile.site`
-   Check out `minidream-r-env` folder and find `Rprofile.site`. To ensure that the latest packages get installed, please replace `options(repos = c(CRAN='https://mran.microsoft.com/snapshot/XX'), download.file.method = 'libcurl')` with the latest date.
+* `R/submission_helpers`
+   - Update the folder synIDs where module submissions will be uploaded:
 
-2. To install packages globally (for all users), you could do it interactively. See an example here:
-   `docker exec rstudio install2.r ggfortify factoextra GGally`
+      ```
+      submission_folder <- switch(
+        module,
+        "0" = "syn000",
+        "1" = "syn111",
+        "2" = "syn222",
+        "3" = "syn333",
+        "4" = "syn444",
+        "5" = "syn555",
+        "6" = "syn666",
+        "7" = "syn777"
+      )
+      ```
 
-> Notes: the packages that get installed are: `install2.r, ggfortify, factoextra GGally`. The container is serving as an environment for students. After the container gets launched, a better way to install packages is to install them interactively like above. Otherwise, student's home directory would get wiped out.
+   - update the evaluation ID for the `synSubmit` function:
 
-For installing the latest dataset, you could do:
+      ```
+      submission <- synSubmit(evaluation = "<need to be updated>",
+                           entity = activity_submission)
+      ```
 
-`docker exec rstudio R -q -e 'remotes::install_github("allisonhorst/palmerpenguins")`
+### Conduct Dry-runs
 
-> Notes: the dataset on CRAN might be outdated. The GitHub version might contain the latest version of the dataset.
+1. If it's not already active, activate the `minidream` virtual environment. 
+
+2. Assuming you are in the `minidream-challenge` directory, test whether you
+   can run `challenge.py` without any errors:
+
+   ```
+   python scoring_harness/challenge.py -h
+   ```
+
+3. We also recommend testing out one of the commands as well, ideally, the
+   same one listed in `challenge_eval.sh`, e.g.
+
+   ```
+   python scoring_harness/challenge.py score --all
+   ```
+
+   If it's working properly (and assuming there are no pending submission to
+   be evaluated yet), you should get some logs in STDOUT like this:
+
+   ```
+   ===========================================================================
+   2023-06-03T07:12:24.821643
+
+
+   Scoring: 9615336 - 2023 miniDREAM Module Submissions
+   ------------------------------------------------------------
+
+
+   done:  2023-06-03T07:12:25.028427
+   =========================================================================== 
+   ```
+
+### Automate the Process
+
+Once you are sure the scoring harness is working as expected, set up a 
+[Cron job](https://help.ubuntu.com/community/CronHowto#Starting_to_Use_Cron)
+so that it will run every minute of every day.
+
+1. Open up the crontab:
+
+   ```
+   crontab -e
+   ```
+
+2. Add the following task to the file:
+
+   ```
+   * * * * * /home/<your username>/minidream-challenge/scoring_harness/challenge_eval.sh
+   ```
+
+3. Save and exit the file.  Assuming it's working properly, logs will be saved
+   into `scoring_harness/log/score.log`
+
+> **Note**: if errors are noted in the log file, we recommend stopping the cron
+> job so that you can address the errors in the interim. You can temporarily stop
+> the job by commenting out the task with #.
+
+
+**Congrats!** 🎉 You just finished setting up the challenge infrastructure for miniDREAM!
 
 ---
 
