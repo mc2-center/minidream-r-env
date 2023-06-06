@@ -120,11 +120,6 @@ To install a new package to the server, do:
 docker compose exec -it rstudio R -e "install.packages('<package name>')"
 ```
 
-> **Note**: to ensure the latest packages are installed, replace
-> `options(repos = c(CRAN='https://mran.microsoft.com/snapshot/XX'), download.file.method = 'libcurl')`
-> within `rstudio/config/Rprofile.site` with the latest date.
-
-
 ### Shared Files
 
 By default, the server is configured to bind-mount `minidream-challenge` as

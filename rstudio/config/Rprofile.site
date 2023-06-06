@@ -1,5 +1,4 @@
 options(repos = c(CRAN = 'https://cran.rstudio.com/'), download.file.method = 'libcurl')
-options(repos = c(CRAN='https://mran.microsoft.com/snapshot/2023-06-01'), download.file.method = 'libcurl')
 
 
 # Configure httr to perform out-of-band authentication if HTTR_LOCALHOST
