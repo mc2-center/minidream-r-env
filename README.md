@@ -276,9 +276,10 @@ drwxrwxr-x 3 admin rstudio-admin 4096 May 23 17:07 welcome
    in RStudio). A `modules` directory should now be available in the Files
    pane in RStudio.
 
-2. (One-time only) Some course materials are dependent on scripts located at
-   `/home/shared/R`, which does not exist when the server is first built. Create
-   a symbolic link in the `rstudio` container so that this filepath exists:
+2. (One-time only) Some course materials are dependent on scripts and data
+   located in `/home/shared/*`, which does not exist when the server is
+   first built. Create a symbolic link in the `rstudio` container so that
+   this filepath exists:
 
    ```
    docker compose exec -it rstudio ln -s /shared /home/shared
