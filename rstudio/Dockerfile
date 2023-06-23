@@ -12,6 +12,7 @@ RUN apt-get update \
         libglpk-dev \
         rsync \
         zlib1g-dev \
+        libxt6 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install R packages from CRAN (tidyverse pre-installed in base image)
